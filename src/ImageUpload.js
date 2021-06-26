@@ -3,7 +3,9 @@ import "./css/image.css"
 
 function ImageUpload(){
     return (
-<div className="image">Image upload</div>
+<div className="image">
+    
+</div>
     )
 }
 export default ImageUpload

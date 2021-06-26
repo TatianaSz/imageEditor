@@ -1,6 +1,17 @@
+html{
+    position:relative;
+   height:100%
+}
+body{
+    height:100%;
+}
+/*its making the app height to be a full page height*/
+
 .app{
-    color:red;
+  position:absolute;
+    width:100%;
     color:#dedede;
     display:flex;
     flex-direction:row;
+    height:100%
 }

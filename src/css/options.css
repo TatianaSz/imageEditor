@@ -1,4 +1,26 @@
 .options{
    width:25%;
     background-color:#373737;
+    overflow-y: scroll;
+   
 }
+/* Works on Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #949494 #2d2d2d;
+  }
+  
+  /* Works on Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 12px;
+  }
+  
+  *::-webkit-scrollbar-track {
+    background: #2d2d2d;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    background-color: #949494;
+    border-radius: 20px;
+    border: 3px solid #949494;
+  }
