@@ -18,3 +18,7 @@
     width:100%;
     cursor:pointer;
 }
+.menu-clicked{
+    background-color:#373737;
+    color:#ea80fc;
+}

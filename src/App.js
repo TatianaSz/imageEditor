@@ -9,12 +9,21 @@ import "./css/app.css";
 
 
 function App() {
+  const [file, setFile] = useState(null);
+  console.log(file)
   
+ function addFile(e){
+  URL.revokeObjectURL(file)
+   setFile(
+    URL.createObjectURL(e.target.files[0])
+    )
+ 
+  }
     return (
       <div className="app">
-        <Menu />
-        <Options />
-        <ImageUpload />
+        <Menu clicked="menu-clicked"/>
+        <Options onChange={addFile}/>
+        <ImageUpload src={file}/>
       </div>
     );
   

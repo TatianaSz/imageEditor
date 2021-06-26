@@ -6,11 +6,11 @@ import {IoResize} from 'react-icons/io5'
 import {IoText} from "react-icons/io5"
 import {IoShapesOutline} from "react-icons/io5"
 
-function Menu(){
+function Menu(props){
     return (
         <div className="menu">
             <ul>
-                <li><BsCardImage /> </li>
+                <li className={props.clicked}><BsCardImage /> </li>
                 <li><HiOutlineAdjustments /></li>
                 <li><IoResize /></li>
                 <li><IoText /></li>
