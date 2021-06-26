@@ -10,7 +10,14 @@ import "./css/app.css";
 
 function App() {
   const [file, setFile] = useState(null);
-  console.log(file)
+  
+  
+  const [filtr, setFiltr] = useState(100);
+  function addValue(e){
+  setFiltr(e.target.value)
+  console.log(filtr)
+  }
+ 
   
  function addFile(e){
   URL.revokeObjectURL(file)
@@ -19,11 +26,16 @@ function App() {
     )
  
   }
+  
+  function changeBrightness(){
+
+  }
+   
     return (
       <div className="app">
         <Menu clicked="menu-clicked"/>
-        <Options onChange={addFile}/>
-        <ImageUpload src={file}/>
+        <Options onChange={addFile} slider={addValue}/>
+        <ImageUpload src={file} val={filtr}/>
       </div>
     );
   

@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from 'react';
 import "./css/options.css"
 import {BsFilePlus} from "react-icons/bs"
+import Slider from "./Slider"
 
 function Options(props){
+
+
+
     return (
         <div className="options" >
         <label className="uploader">
@@ -12,7 +16,7 @@ function Options(props){
             </div>
         <input  type="file" onChange={props.onChange}/>
         </label>
-        
+        <Slider onChange={props.slider}/>
         </div>
     )
 }
