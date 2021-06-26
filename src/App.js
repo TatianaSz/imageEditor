@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Menu from "./Menu"
 import Options from "./Options"
 import ImageUpload from './ImageUpload';
@@ -27,9 +27,7 @@ function App() {
  
   }
   
-  function changeBrightness(){
-
-  }
+  
    
     return (
       <div className="app">
