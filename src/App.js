@@ -12,6 +12,7 @@ function App() {
   
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
+  const [cont, setCont] = useState(0);
 
  function addFile(e){
   URL.revokeObjectURL(file)
@@ -38,8 +39,6 @@ function App() {
  });
  
   function setBrightness(){
-    
-   
     const canvas = canva.current;
     const img = image.current;
     const ctx = canvas.getContext("2d")
@@ -50,8 +49,6 @@ function App() {
       var y = (canvas.height / 2) - (img.height / 2) * scale;
       ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
    
-     
-    
   var iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
   var dA = iD.data; 
 
@@ -62,14 +59,26 @@ function App() {
      dA[i+2] += 255 * (val / 100);
   }
   
+  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
+
+  for (var i = 0; i < dA.length; i+= 4) {
+    dA[i] = (factor * (dA[i] - 128.0) + 128.0);
+    dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
+    dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
+  }
+
   canvas.getContext('2d').putImageData(iD, 0, 0);
   
   }
 
+
     return (
       <div className="app">
         <Menu clicked="menu-clicked"/>
-        <Options onChange={addFile} value={val} slide={()=>{setVal(val)}}onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
+        <Options onChange={addFile} value={val} slide={()=>{setVal(val)}}onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} 
+          value2={cont} slide={()=>{setCont(cont)}}onClickRight2={()=>{setCont(cont+3); setBrightness()}} onClickLeft2={()=>{setCont(cont-3);setBrightness()}} 
+        
+        />
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
     );

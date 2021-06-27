@@ -16,7 +16,8 @@ function Options(props){
             </div>
         <input  type="file" onChange={props.onChange}/>
         </label>
-        <Slider value={props.value}  onChange={props.slide} onClickLeft={props.onClickLeft}  onClickRight={props.onClickRight} />
+        <Slider value={props.value}  onChange={props.slide} onClickLeft={props.onClickLeft}  onClickRight={props.onClickRight} 
+                value2={props.value2} onClickLeft2={props.onClickLeft2}  onClickRight2={props.onClickRight2}/>
         </div>
     )
 }
