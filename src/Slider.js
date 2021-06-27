@@ -5,7 +5,8 @@ function Slider(props){
 
 return(
 <div className="slider">
-<input type="range" min="0" max="200" id="myRange" onChange={props.onChange}/> 
+    <button onClick={props.onClick}>rozjaśnij</button>
+<input type="range" min="0" max="200" id="myRange" /> 
 <p>{}</p>
 </div>
 )
