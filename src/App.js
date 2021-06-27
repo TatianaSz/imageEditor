@@ -11,7 +11,7 @@ function App() {
   const image = useRef(null);
   
   const [file, setFile] = useState(null);
-  const [val, setVal] = useState(1.35);
+  const [val, setVal] = useState(0);
 
  function addFile(e){
   URL.revokeObjectURL(file)
@@ -30,39 +30,46 @@ function App() {
      var x = (canvas.width / 2) - (img.width / 2) * scale;
      var y = (canvas.height / 2) - (img.height / 2) * scale;
      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-     
-    }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
- });
   
+    }
+
+    
+  //  ctx.clearRect(0, 0, canvas.width, canvas.height);
+ });
+ 
   function setBrightness(){
+    
+   
     const canvas = canva.current;
     const img = image.current;
+    const ctx = canvas.getContext("2d")
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+      var x = (canvas.width / 2) - (img.width / 2) * scale;
+      var y = (canvas.height / 2) - (img.height / 2) * scale;
+      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+   
+     
+    
   var iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
   var dA = iD.data; 
 
-  var brightnessMul = 1.35; 
-
    for(var i = 0; i < dA.length; i += 4)
      {
-     var red = dA[i]; 
-     var green = dA[i + 1]; 
-     var blue = dA[i + 2]; 
-     let brightenedRed = brightnessMul * red;
-     let brightenedGreen = brightnessMul * green;
-     let brightenedBlue = brightnessMul * blue;
-     dA[i] = brightenedRed;
-     dA[i + 1] = brightenedGreen;
-     dA[i + 2] = brightenedBlue;
+      dA[i] += 255 * (val / 100);
+      dA[i+1] += 255 * (val / 100);
+     dA[i+2] += 255 * (val / 100);
   }
-   
+  
   canvas.getContext('2d').putImageData(iD, 0, 0);
+  
   }
 
     return (
       <div className="app">
         <Menu clicked="menu-clicked"/>
-        <Options onChange={addFile} slider={setBrightness}/>
+        <Options onChange={addFile} value={val} slide={()=>{setVal(val)}}onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
     );
