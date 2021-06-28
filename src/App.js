@@ -3,6 +3,7 @@ import Menu from "./Menu"
 import Options from "./Options"
 import ImageUpload from './ImageUpload';
 import Uploader from './Uploader'
+import Delete from './Delete'
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 
@@ -100,7 +101,7 @@ function isCanvasEmpty(cnv) {
         <Menu menuRef={list}  onClick={clear} />
         <Options>
         <Uploader onChange={addFile}/>
-        <button onClick={checkvanvs}>Delete</button>
+        <Delete onClick={checkvanvs}/>
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
