@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Menu from "./Menu"
 import Options from "./Options"
 import ImageUpload from './ImageUpload';
+import Uploader from './Uploader'
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 
@@ -75,10 +76,9 @@ function App() {
     return (
       <div className="app">
         <Menu clicked="menu-clicked"/>
-        <Options onChange={addFile} value={val} slide={()=>{setVal(val)}}onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} 
-          value2={cont} slide={()=>{setCont(cont)}}onClickRight2={()=>{setCont(cont+3); setBrightness()}} onClickLeft2={()=>{setCont(cont-3);setBrightness()}} 
-        
-        />
+        <Options>
+        <Uploader onChange={addFile}/>
+        </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
     );
@@ -86,3 +86,6 @@ function App() {
 }
 
 export default App;
+
+// value={val} slide={()=>{setVal(val)}}onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} 
+          // value2={cont} slide={()=>{setCont(cont)}}onClickRight2={()=>{setCont(cont+3); setBrightness()}} onClickLeft2={()=>{setCont(cont-3);setBrightness()}}
