@@ -10,19 +10,18 @@ import "./css/app.css";
 function App() {
   const canva = useRef(null);
   const image = useRef(null);
+  const list = useRef(null)
   
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
   const [cont, setCont] = useState(0);
 
  function addFile(e){
-  URL.revokeObjectURL(file)
+//  URL.revokeObjectURL(file)
    setFile(
     URL.createObjectURL(e.target.files[0])
     )
- 
   }
-
   useEffect(() => {   
     const canvas = canva.current;
     const ctx = canvas.getContext("2d")
@@ -32,10 +31,7 @@ function App() {
      var x = (canvas.width / 2) - (img.width / 2) * scale;
      var y = (canvas.height / 2) - (img.height / 2) * scale;
      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-  
     }
-
-    
   //  ctx.clearRect(0, 0, canvas.width, canvas.height);
  });
  
@@ -72,12 +68,39 @@ function App() {
   
   }
 
+  function clear(e){
+    for(let i=0; i<list.current.childNodes.length; i++){
+        list.current.childNodes[i].classList.remove("clicked")
+     }
+  }
+
+
+  function checkvanvs() {
+    var cnv = canva.current
+    const ctx = cnv.getContext("2d")
+    if (isCanvasEmpty(cnv))
+        alert('Empty!');
+    else
+    ctx.clearRect(0, 0, cnv.width, cnv.height)
+        
+};
+
+function isCanvasEmpty(cnv) {
+    const blank = document.createElement('canvas');
+
+    blank.width = cnv.width;
+    blank.height = cnv.height;
+
+    return cnv.toDataURL() === blank.toDataURL();
+}
+
 
     return (
       <div className="app">
-        <Menu clicked="menu-clicked"/>
+        <Menu menuRef={list}  onClick={clear} />
         <Options>
         <Uploader onChange={addFile}/>
+        <button onClick={checkvanvs}>Delete</button>
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
