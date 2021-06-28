@@ -6,7 +6,7 @@ function Delete(props){
 
 return(
     <div className='deleter-container'>
-    <button className="deleter" onClick={props.onClick}>Delete Image <br/>
+    <button className="deleter" onClick={()=>{props.onClick; console.log(props.men())}}>Delete Image <br/>
     <div className="deleter-icon"><RiDeleteBack2Line/></div>
     </button>
     </div>

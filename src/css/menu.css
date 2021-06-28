@@ -11,6 +11,7 @@
 .menu li{
     display:flex;
     justify-content: center;
+    position:relative;
     align-items:center;
     font-size:25px;
     height:70px;
@@ -24,4 +25,12 @@
 }
 .lol{
     background-color:red;
+}
+.transparent{
+    z-index:1;
+    position:absolute;
+    background-color:red;
+    opacity:0;
+    height:70px;
+    width:100%
 }

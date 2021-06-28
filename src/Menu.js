@@ -8,25 +8,15 @@ import {IoShapesOutline} from "react-icons/io5"
 
 
 function Menu(props){
-    const [zero, setZero] = useState("clicked");
-    const [one, setOne] = useState("");
-    const [two, setTwo] = useState("");
-    const [three, setThree] = useState("");
-    const [four, setFour] = useState("");
-    
-    
     return (
         <div className="menu">
             <ul ref={props.menuRef}>
-                <li  className={zero} onClick={()=>{setZero("clicked"); setOne(""); setTwo(""); setThree("") ;setFour("")}}><BsCardImage /> </li>
-                <li  className={one}  onClick={()=>{setZero(""); setOne("clicked"); setTwo(""); setThree("") ;setFour("")}} ><HiOutlineAdjustments/></li>
-                <li className={two}  onClick={()=>{setZero(""); setOne(""); setTwo("clicked"); setThree("") ;setFour("")}}><IoResize /></li>
-                <li className={three} onClick={()=>{setZero(""); setOne(""); setTwo(""); setThree("clicked") ;setFour("")}}><IoText /></li>
-                <li className={four} onClick={()=>{setZero(""); setOne(""); setTwo(""); setThree("") ;setFour("clicked")}}><IoShapesOutline /></li>
+                <li  className="clicked"><div data-value="0" onClick={props.onClick} className="transparent"></div><BsCardImage /> </li>
+                <li  className=""><div data-value="1" onClick={props.onClick} className="transparent"></div><HiOutlineAdjustments/></li>
+                <li className=""><div data-value="2" onClick={props.onClick} className="transparent"></div><IoResize /></li>
+                <li className=""><div data-value="3" onClick={props.onClick} className="transparent"></div><IoText /></li>
+                <li className=""><div data-value="4" onClick={props.onClick} className="transparent"></div><IoShapesOutline /></li>
             </ul>
-
-
-
         </div>
     )
 }

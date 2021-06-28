@@ -17,6 +17,8 @@ function App() {
   const [val, setVal] = useState(0);
   const [cont, setCont] = useState(0);
 
+  
+
  function addFile(e){
 //  URL.revokeObjectURL(file)
    setFile(
@@ -69,11 +71,7 @@ function App() {
   
   }
 
-  function clear(e){
-    for(let i=0; i<list.current.childNodes.length; i++){
-        list.current.childNodes[i].classList.remove("clicked")
-     }
-  }
+ 
 
 
   function checkvanvs() {
@@ -95,13 +93,22 @@ function isCanvasEmpty(cnv) {
     return cnv.toDataURL() === blank.toDataURL();
 }
 
-
+function menu(e){
+  let a=e.target.dataset.value;
+  for(let i=0; i<list.current.childNodes.length; i++){
+    list.current.childNodes[i].classList.remove("clicked")
+   if(a==i){
+      e.target.parentNode.classList.add("clicked")
+   }
+  }
+}
     return (
       <div className="app">
-        <Menu menuRef={list}  onClick={clear} />
-        <Options>
+        <Menu menuRef={list}  onClick={menu} />
+        <Options  >
         <Uploader onChange={addFile}/>
         <Delete onClick={checkvanvs}/>
+          
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
