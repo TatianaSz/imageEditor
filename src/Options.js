@@ -4,7 +4,7 @@ import "./css/options.css"
 function Options(props){
     return (
         <div  className="options" >
-            <div  className="generic">
+            <div test={props.test} className="generic">
         {props.children}
         </div>
         </div>

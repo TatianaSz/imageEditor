@@ -16,11 +16,11 @@ function App() {
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
   const [cont, setCont] = useState(0);
-
-  
+  const [menus, setMenus] = useState("0")
+  let a;
 
  function addFile(e){
-//  URL.revokeObjectURL(file)
+  URL.revokeObjectURL(file)
    setFile(
     URL.createObjectURL(e.target.files[0])
     )
@@ -35,6 +35,7 @@ function App() {
      var y = (canvas.height / 2) - (img.height / 2) * scale;
      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
     }
+    
   //  ctx.clearRect(0, 0, canvas.width, canvas.height);
  });
  
@@ -71,10 +72,8 @@ function App() {
   
   }
 
- 
-
-
   function checkvanvs() {
+    setFile(null)
     var cnv = canva.current
     const ctx = cnv.getContext("2d")
     if (isCanvasEmpty(cnv))
@@ -94,20 +93,36 @@ function isCanvasEmpty(cnv) {
 }
 
 function menu(e){
-  let a=e.target.dataset.value;
+  a=e.target.dataset.value;
+  
   for(let i=0; i<list.current.childNodes.length; i++){
     list.current.childNodes[i].classList.remove("clicked")
    if(a==i){
       e.target.parentNode.classList.add("clicked")
    }
+   setMenus(a)
+  }
+  
+  
+  // switch(a){
+  //   case "0":
+  //     setMenus("0")
+  //     break;
+  // }
+}
+
+function opt(e){
+  if (a=="0"){
+    console.log("chyba dziala")
+    return "none"
   }
 }
     return (
       <div className="app">
         <Menu menuRef={list}  onClick={menu} />
-        <Options  >
-        <Uploader onChange={addFile}/>
-        <Delete onClick={checkvanvs}/>
+        <Options test="1" >
+        <Uploader op={menus}   onChange={addFile}/>
+        <Delete op={menus} onClick={checkvanvs}/>
           
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
