@@ -1,12 +1,15 @@
-.slider{
+.slider-container{
     margin-top:3rem;
-    display: flex;
-	justify-content: center;
-	align-items: center;
+    text-align:center;
     animation-name: Loaded;
     animation-duration: .6s;
     animation-fill-mode: forwards;
-    
+}
+
+.slider{
+    display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 @keyframes Loaded {

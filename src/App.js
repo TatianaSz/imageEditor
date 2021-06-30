@@ -61,13 +61,13 @@ function App() {
      dA[i+2] += 255 * (val / 100);
   }
   
-  // var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
+  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
 
-  // for (var i = 0; i < dA.length; i+= 4) {
-  //   dA[i] = (factor * (dA[i] - 128.0) + 128.0);
-  //   dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
-  //   dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
-  // }
+  for (var i = 0; i < dA.length; i+= 4) {
+    dA[i] = (factor * (dA[i] - 128.0) + 128.0);
+    dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
+    dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
+  }
 
   canvas.getContext('2d').putImageData(iD, 0, 0);
   
@@ -108,7 +108,8 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Options>
         <Uploader op={menus}   onChange={addFile}/>
         <Delete op={menus} onClick={checkvanvs}/>
-        <Slider op={menus} value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
+        <Slider op={menus} name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
+        <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
@@ -118,5 +119,3 @@ function menu(e){ //ads background colors and sets menu state that allows to det
 
 export default App;
 
-// value={val} slide={()=>{setVal(val)}}onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} 
-          // value2={cont} slide={()=>{setCont(cont)}}onClickRight2={()=>{setCont(cont+3); setBrightness()}} onClickLeft2={()=>{setCont(cont-3);setBrightness()}}
