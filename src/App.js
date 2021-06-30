@@ -122,13 +122,13 @@ function hslToRgb(h, s, l){
      dA[i+2] += 255 * (val / 100);
   }
   
-  // var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
+  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
 
-  // for (var i = 0; i < dA.length; i+= 4) {
-  //   dA[i] = (factor * (dA[i] - 128.0) + 128.0);
-  //   dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
-  //   dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
-  // }
+  for (var i = 0; i < dA.length; i+= 4) {
+    dA[i] = (factor * (dA[i] - 128.0) + 128.0);
+    dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
+    dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
+  }
 
   canvas.getContext('2d').putImageData(iD, 0, 0);
   
