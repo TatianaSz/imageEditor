@@ -41,7 +41,8 @@ function App() {
   function setBrightness(){
     const canvas = canva.current;
     const img = image.current;
-    if(canvas.getContext("2d").width){ //checks if image is even there in case someone tried to lighten nothing
+    
+    if(img.width){ //checks if image is even there in case someone tried to lighten nothing
     const ctx = canvas.getContext("2d")
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
