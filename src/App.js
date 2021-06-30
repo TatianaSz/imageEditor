@@ -4,6 +4,7 @@ import Options from "./Options"
 import ImageUpload from './ImageUpload';
 import Uploader from './Uploader'
 import Delete from './Delete'
+import Slider from './Slider'
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 
@@ -60,13 +61,13 @@ function App() {
      dA[i+2] += 255 * (val / 100);
   }
   
-  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
+  // var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
 
-  for (var i = 0; i < dA.length; i+= 4) {
-    dA[i] = (factor * (dA[i] - 128.0) + 128.0);
-    dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
-    dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
-  }
+  // for (var i = 0; i < dA.length; i+= 4) {
+  //   dA[i] = (factor * (dA[i] - 128.0) + 128.0);
+  //   dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
+  //   dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
+  // }
 
   canvas.getContext('2d').putImageData(iD, 0, 0);
   
@@ -85,16 +86,13 @@ function App() {
 
 function isCanvasEmpty(cnv) {
     const blank = document.createElement('canvas');
-
     blank.width = cnv.width;
     blank.height = cnv.height;
-
     return cnv.toDataURL() === blank.toDataURL();
 }
 
 function menu(e){
   a=e.target.dataset.value;
-  
   for(let i=0; i<list.current.childNodes.length; i++){
     list.current.childNodes[i].classList.remove("clicked")
    if(a==i){
@@ -102,22 +100,15 @@ function menu(e){
    }
    setMenus(a)
   }
-
 }
 
-function opt(e){
-  if (a=="0"){
-    console.log("chyba dziala")
-    return "none"
-  }
-}
     return (
       <div className="app">
         <Menu menuRef={list}  onClick={menu} />
-        <Options test="1" >
+        <Options>
         <Uploader op={menus}   onChange={addFile}/>
         <Delete op={menus} onClick={checkvanvs}/>
-          
+        <Slider op={menus} value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>

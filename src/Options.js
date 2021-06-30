@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import "./css/options.css"
 
 function Options(props){
     return (
         <div  className="options" >
-            <div test={props.test} className="generic">
         {props.children}
-        </div>
         </div>
     )
 }
 
 export default Options
-//style={{display:"none"}}
