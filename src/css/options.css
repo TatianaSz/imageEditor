@@ -39,6 +39,13 @@
     margin: 2rem auto;
     border-radius:10px;
     font-size:1.2rem;
+    animation-name: uploaderLoaded;
+    animation-duration: .6s;
+    animation-fill-mode: forwards;
+  }
+  @keyframes uploaderLoaded {
+    from {transform: translateX(-30%);opacity:0}
+    to {transform: translateX(0%);opacity:1;}
   }
   .uploader .centered{
     margin: 0;

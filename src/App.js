@@ -102,13 +102,7 @@ function menu(e){
    }
    setMenus(a)
   }
-  
-  
-  // switch(a){
-  //   case "0":
-  //     setMenus("0")
-  //     break;
-  // }
+
 }
 
 function opt(e){

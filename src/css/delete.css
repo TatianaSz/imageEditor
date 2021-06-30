@@ -1,6 +1,14 @@
 .deleter-container{
     position:relative;
-}
+    animation-name: Loaded;
+    animation-duration: .6s;
+    animation-fill-mode: forwards;
+  }
+  @keyframes Loaded {
+    from {transform: translateX(-15%);opacity:0}
+    to {transform: translateX(0%);opacity:1;}
+  }
+
 
 .deleter{
     background-color:#292929;
