@@ -20,7 +20,7 @@ function App() {
   const [menus, setMenus] = useState("0")
   let a;
 
- function addFile(e){
+  function addFile(e){
   URL.revokeObjectURL(file)
    setFile(
     URL.createObjectURL(e.target.files[0])
@@ -36,13 +36,12 @@ function App() {
      var y = (canvas.height / 2) - (img.height / 2) * scale;
      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
     }
-    
-  //  ctx.clearRect(0, 0, canvas.width, canvas.height);
  });
  
   function setBrightness(){
     const canvas = canva.current;
     const img = image.current;
+    if(canvas.getContext("2d").width){ //checks if image is even there in case someone tried to lighten nothing
     const ctx = canvas.getContext("2d")
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
@@ -72,7 +71,7 @@ function App() {
   canvas.getContext('2d').putImageData(iD, 0, 0);
   
   }
-
+}
   function checkvanvs() {
     setFile(null)
     var cnv = canva.current
@@ -91,14 +90,14 @@ function isCanvasEmpty(cnv) {
     return cnv.toDataURL() === blank.toDataURL();
 }
 
-function menu(e){
+function menu(e){ //ads background colors and sets menu state that allows to detect which was cliccked
   a=e.target.dataset.value;
   for(let i=0; i<list.current.childNodes.length; i++){
     list.current.childNodes[i].classList.remove("clicked")
-   if(a==i){
+    if(a==i){
       e.target.parentNode.classList.add("clicked")
-   }
-   setMenus(a)
+    }
+    setMenus(a)
   }
 }
 

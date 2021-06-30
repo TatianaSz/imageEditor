@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React from "react"
 import "./css/menu.css"
 import { BsCardImage } from 'react-icons/bs';
 import {HiOutlineAdjustments} from 'react-icons/hi'

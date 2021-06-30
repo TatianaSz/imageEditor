@@ -1,5 +1,6 @@
 .options{
    width:25%;
+   position:relative;
     background-color:#373737;
     overflow-y: scroll;
    

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import "./css/image.css"
 
 function ImageUpload(props){
