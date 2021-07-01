@@ -5,6 +5,7 @@ import ImageUpload from './ImageUpload';
 import Uploader from './Uploader'
 import Delete from './Delete'
 import Slider from './Slider'
+import Flippin from './Flippin'
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 
@@ -13,8 +14,7 @@ function App() {
   const canva = useRef(null);
   const image = useRef(null);
   const list = useRef(null);
-  
-  
+
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
   const [cont, setCont] = useState(0);
@@ -39,42 +39,38 @@ function App() {
      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
     }
  });
+ const canvas = canva.current;
+ const img = image.current;
+ let ctx;
+ let iD;
+ let dA;
+ function reDraw(){
+   canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+   var x = (canvas.width / 2) - (img.width / 2) * scale;
+   var y = (canvas.height / 2) - (img.height / 2) * scale;
+   canvas.getContext("2d").drawImage(img, x, y, img.width * scale, img.height * scale);
+ }
  
   function setBrightness(e){
-    const canvas = canva.current;
-    const img = image.current;
+   if(img.width){ //checks if image is even there in case someone tried to lighten nothing
     
-    if(img.width){ //checks if image is even there in case someone tried to lighten nothing
-    const ctx = canvas.getContext("2d")
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-      var x = (canvas.width / 2) - (img.width / 2) * scale;
-      var y = (canvas.height / 2) - (img.height / 2) * scale;
-      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+   reDraw()
+   iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
+   dA = iD.data;
    
-  var iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
-  var dA = iD.data; 
 
-  var slider = e.target
-  //console.log(slider)
-  //filters
+  var sv = (sat/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
 
-  var sv = (sat/100); // saturation value. 0 = grayscale, 1 = original
-
-  var luR = 0.3086; // constant to determine luminance of red. Similarly, for green and blue
-  var luG = 0.6094;
-  var luB = 0.0820;
-  
-  var az = (1 - sv)*luR + sv;
-  var bz = (1 - sv)*luG;
-  var cz = (1 - sv)*luB;
-  var dz = (1 - sv)*luR;
-  var ez = (1 - sv)*luG + sv;
-  var fz = (1 - sv)*luB;
-  var gz = (1 - sv)*luR;
-  var hz = (1 - sv)*luG;
-  var iz = (1 - sv)*luB + sv;
+  var az = (1 - sv)*0.3086 + sv;
+  var bz = (1 - sv)*0.6094;
+  var cz = (1 - sv)*0.0820;
+  var dz = (1 - sv)*0.3086;
+  var ez = (1 - sv)*0.6094 + sv;
+  var fz = (1 - sv)*0.0820;
+  var gz = (1 - sv)*0.3086;
+  var hz = (1 - sv)*0.6094;
+  var iz = (1 - sv)*0.0820 + sv;
   
   for(var i = 0; i < dA.length; i += 4)
   {
@@ -91,8 +87,6 @@ function App() {
       dA[i + 2] = saturateddBlue;
   }
      
-
-
    for(var i = 0; i < dA.length; i += 4)
      {
       dA[i] += 255 * (val / 100);
@@ -108,10 +102,28 @@ function App() {
     dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
   }
 
+  //ctx.translate(canvas.width / 2, canvas.height / 2);
+   //ctx.scale(w,z)
   canvas.getContext('2d').putImageData(iD, 0, 0);
   
   }
 }
+function flippinTime(){
+  // const canvas = canva.current;
+  //   const img = image.current;
+  //   const ctx = canvas.getContext("2d")
+  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+  //   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+  //   var x =  - (img.width / 2) * scale;
+  //   var y =  - (img.height / 2) * scale;
+  
+  //  ctx.translate(canvas.width / 2, canvas.height / 2);
+  //  ctx.scale(-1,-1)
+  //      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+  
+}
+
   function checkvanvs() {
     setFile(null)
     var cnv = canva.current
@@ -150,6 +162,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
+        <Flippin op={menus} onClick={flippinTime}/>
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
