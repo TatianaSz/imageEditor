@@ -4,6 +4,7 @@
     animation-name: Loaded;
     animation-duration: .6s;
     animation-fill-mode: forwards;
+    font-size:1.2rem;
 }
 
 .slider{
@@ -27,4 +28,13 @@
     display: inline-block;
     border: none;
     padding: .5rem .5rem;
+}
+.flip{
+    margin:1rem;
+    width:35%;
+    font-size: 1.2rem;
+}
+.flip-slider{
+    margin-top:.4rem;
+    border-top:1px solid #dedede;
 }

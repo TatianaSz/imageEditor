@@ -163,7 +163,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
-        <Flippin op={menus} hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
+        <Flippin op={menus} name="Flip" hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
