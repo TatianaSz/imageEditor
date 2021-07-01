@@ -6,9 +6,10 @@ import Uploader from './Uploader'
 import Delete from './Delete'
 import Slider from './Slider'
 import Flippin from './Flippin'
+import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
-import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react/cjs/react.production.min';
+
 
 
 function App() {
@@ -125,13 +126,13 @@ function flippinTime(wziu, bziu){
    else if(wziu=="left"){
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     ctx.translate(canvas.width*0.5, canvas.height*0.5)
-    ctx.rotate((Math.PI / 180) * 25)
+    ctx.rotate((Math.PI / -180) * 90)
     ctx.translate(-canvas.width*0.5, -canvas.height*0.5)
    }
    else{
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     ctx.translate(canvas.width*0.5, canvas.height*0.5)
-    ctx.rotate((Math.PI / -180) * 25)
+    ctx.rotate((Math.PI / 180) * 90)
     ctx.translate(-canvas.width*0.5, -canvas.height*0.5)
    }
    setBrightness()
@@ -178,7 +179,10 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
         <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){flippinTime("left",-1)}} ver={function(){flippinTime("right",1)}}/> 
         </Options>
-        <ImageUpload canvaRef={canva} imageRef={image} src={file} />
+        
+        <ImageUpload canvaRef={canva} imageRef={image} src={file} >
+        <CropDrag />
+          </ImageUpload>
       </div>
     );
   
