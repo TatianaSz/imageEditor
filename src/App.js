@@ -8,6 +8,7 @@ import Slider from './Slider'
 import Flippin from './Flippin'
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
+import { __SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED } from 'react/cjs/react.production.min';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
   const [cont, setCont] = useState(0);
   const [sat, setSat] = useState(100);
   const [menus, setMenus] = useState("0")
+ const [test, setTest] =useState([])
   let a;
 
   function addFile(e){
@@ -38,10 +40,10 @@ function App() {
      var y = (canvas.height / 2) - (img.height / 2) * scale;
      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
     }
+
  });
  const canvas = canva.current;
  const img = image.current;
- let ctx;
  let iD;
  let dA;
  function reDraw(){
@@ -54,7 +56,7 @@ function App() {
  
   function setBrightness(e){
    if(img.width){ //checks if image is even there in case someone tried to lighten nothing
-    
+ 
    reDraw()
    iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
    dA = iD.data;
@@ -101,27 +103,26 @@ function App() {
     dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
     dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
   }
-
-  //ctx.translate(canvas.width / 2, canvas.height / 2);
-   //ctx.scale(w,z)
   canvas.getContext('2d').putImageData(iD, 0, 0);
-  
+
   }
 }
-function flippinTime(){
-  // const canvas = canva.current;
-  //   const img = image.current;
-  //   const ctx = canvas.getContext("2d")
-  //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-  //   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-  //   var x =  - (img.width / 2) * scale;
-  //   var y =  - (img.height / 2) * scale;
-  
-  //  ctx.translate(canvas.width / 2, canvas.height / 2);
-  //  ctx.scale(-1,-1)
-  //      ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-  
+
+function flippinTime(wziu, bziu){
+   const ctx = canvas.getContext("2d")
+   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+   var y = (canvas.height / 2) - (img.height / 2) * scale;
+   var x = (canvas.width / 2) - (img.width / 2) * scale;
+   if(wziu==1){
+   ctx.translate(0,canvas.height); 
+   ctx.scale(wziu,bziu)
+   ctx.drawImage(img, 0, y, img.width * scale, img.height * scale);}
+   else{
+    ctx.translate(canvas.width,0); 
+    ctx.scale(wziu,bziu)
+    ctx.drawImage(img, x, 0, img.width * scale, img.height * scale);
+   }
+   setBrightness()
 }
 
   function checkvanvs() {
@@ -162,7 +163,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
-        <Flippin op={menus} onClick={flippinTime}/>
+        <Flippin op={menus} hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
