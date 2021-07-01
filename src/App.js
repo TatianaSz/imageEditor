@@ -117,10 +117,22 @@ function flippinTime(wziu, bziu){
    ctx.translate(0,canvas.height); 
    ctx.scale(wziu,bziu)
    ctx.drawImage(img, 0, y, img.width * scale, img.height * scale);}
-   else{
+   else if(wziu==-1){
     ctx.translate(canvas.width,0); 
     ctx.scale(wziu,bziu)
     ctx.drawImage(img, x, 0, img.width * scale, img.height * scale);
+   }
+   else if(wziu=="left"){
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    ctx.translate(canvas.width*0.5, canvas.height*0.5)
+    ctx.rotate((Math.PI / 180) * 25)
+    ctx.translate(-canvas.width*0.5, -canvas.height*0.5)
+   }
+   else{
+    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    ctx.translate(canvas.width*0.5, canvas.height*0.5)
+    ctx.rotate((Math.PI / -180) * 25)
+    ctx.translate(-canvas.width*0.5, -canvas.height*0.5)
    }
    setBrightness()
 }
@@ -160,10 +172,11 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Options>
         <Uploader op={menus}   onChange={addFile}/>
         <Delete op={menus} onClick={checkvanvs}/>
-        <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>{setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
+        <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
-        <Flippin op={menus} name="Flip" hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
+        <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
+        <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){flippinTime("left",-1)}} ver={function(){flippinTime("right",1)}}/> 
         </Options>
         <ImageUpload canvaRef={canva} imageRef={image} src={file} />
       </div>
