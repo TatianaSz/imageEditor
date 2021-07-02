@@ -181,7 +181,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         </Options>
         
         <ImageUpload canvaRef={canva} imageRef={image} src={file} >
-        <CropDrag />
+        <CropDrag/>
           </ImageUpload>
       </div>
     );
