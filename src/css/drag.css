@@ -29,15 +29,16 @@
     
 }
 .e{
-    bottom:0;
+    top:90px;
 }
 .r{
     left:90px;
-    bottom:0;
+    top:90px;
 }
 .test{
     position:absolute;
     top:0;
+    left:0;
     min-height:400px;
     max-height:600px;
     width:600px;
