@@ -8,10 +8,7 @@ function Filters(props){
         <div className="slider-container">
             <div>Choose a filter:</div>
             <div ref={props.filterCanvaRef} className="filters">
-                <div className="filters--option"><canvas id="1" className="filters--option__canva" /></div>
-                <div className="filters--option"><canvas id="2" className="filters--option__canva" /></div>
-                <div className="filters--option"><canvas id="2" className="filters--option__canva" /></div>
-                <div className="filters--option"><canvas id="2" className="filters--option__canva" /></div>
+                {props.children}
             </div>
         </div>
     )

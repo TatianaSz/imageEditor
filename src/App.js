@@ -6,6 +6,7 @@ import Uploader from './Uploader'
 import Delete from './Delete'
 import Slider from './Slider'
 import Filters from "./Filters"
+import FiltersOpt from "./Filters--option"
 import Flippin from './Flippin'
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
@@ -47,7 +48,7 @@ function App() {
         var scaleToFill = Math.max(filterCanvasAll.width / img.width, filterCanvasAll.height / img.height)
         setScaleFill(scaleToFill)
         var x = (filterCanvasAll.width / 2) - (img.width / 2) * scaleF;
-       var y = (filterCanvasAll.height / 2) - (img.height / 2) * scaleF;
+        var y = (filterCanvasAll.height / 2) - (img.height / 2) * scaleF;
        fctx.drawImage(img, x,y, img.width*scaleF, img.height*scaleF)
       }
     }
@@ -208,7 +209,6 @@ function menu(e){ //ads background colors and sets menu state that allows to det
     }
     setMenus(a)
   }
-  
 }
 
     return (
@@ -220,7 +220,9 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
-        <Filters op={menus} filterCanvaRef={filterCanva} />
+        <Filters op={menus} filterCanvaRef={filterCanva}>
+          <FiltersOpt op={menus}/>
+        </Filters>
         <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
         <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
         </Options>
