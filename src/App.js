@@ -37,9 +37,10 @@ function App() {
     const img = image.current;
     img.onload=()=>{
      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-     var x = (canvas.width / 2) - (img.width / 2) * scale;
-     var y = (canvas.height / 2) - (img.height / 2) * scale;
-     ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+     canvas.width=img.width*scale
+     canvas.height=img.height*scale
+     ctx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
+     setTest(scale)
     }
 
  });
@@ -49,10 +50,8 @@ function App() {
  let dA;
  function reDraw(){
    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-   var x = (canvas.width / 2) - (img.width / 2) * scale;
-   var y = (canvas.height / 2) - (img.height / 2) * scale;
-   canvas.getContext("2d").drawImage(img, x, y, img.width * scale, img.height * scale);
+   canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
+ 
  }
  
   function setBrightness(e){
@@ -108,35 +107,69 @@ function App() {
 
   }
 }
-
-function flippinTime(wziu, bziu){
+let dg=0;
+function flippinTime(wziu, bziu, dg){
    const ctx = canvas.getContext("2d")
-   var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-   var y = (canvas.height / 2) - (img.height / 2) * scale;
-   var x = (canvas.width / 2) - (img.width / 2) * scale;
    if(wziu==1){
-   ctx.translate(0,canvas.height); 
-   ctx.scale(wziu,bziu)
-   ctx.drawImage(img, 0, y, img.width * scale, img.height * scale);}
+     if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
+       ctx.translate(0,canvas.height);
+       ctx.scale(1,-1)
+       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
+      }
+     else if(dg==90||dg==-270||dg==270||dg==-90){
+       ctx.translate(canvas.height,0); 
+       ctx.scale(-1,1)
+       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
+      }
+    }
    else if(wziu==-1){
-    ctx.translate(canvas.width,0); 
-    ctx.scale(wziu,bziu)
-    ctx.drawImage(img, x, 0, img.width * scale, img.height * scale);
-   }
-   else if(wziu=="left"){
+     if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
+       ctx.translate(canvas.width,0); 
+       ctx.scale(-1,1)
+       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
+      }
+     else if(dg==90||dg==-270||dg==270||dg==-90){
+       ctx.translate(0,canvas.width); 
+       ctx.scale(1,-1)
+       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
+      }
+    }
+   else {
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    ctx.translate(canvas.width*0.5, canvas.height*0.5)
-    ctx.rotate((Math.PI / -180) * 90)
-    ctx.translate(-canvas.width*0.5, -canvas.height*0.5)
+   if(dg==90 ||dg==-270){
+    canvas.setAttribute("width", img.height*test)
+    canvas.setAttribute("height", img.width*test)
+    ctx.translate(canvas.width,0)
+    ctx.rotate(dg * Math.PI / 180)
+    ctx.drawImage(img,0,0, img.width * test, img.height * test)
    }
-   else{
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    ctx.translate(canvas.width*0.5, canvas.height*0.5)
-    ctx.rotate((Math.PI / 180) * 90)
-    ctx.translate(-canvas.width*0.5, -canvas.height*0.5)
+   else if(dg==180||dg==-180){
+    canvas.setAttribute("width", img.width*test)
+    canvas.setAttribute("height", img.height*test)
+    ctx.translate(canvas.width,canvas.height)
+    ctx.rotate(dg * Math.PI / 180)
+    ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
+   }
+   else if(dg==270||dg==-90){
+    canvas.setAttribute("width", img.height*test)
+    canvas.setAttribute("height", img.width*test)
+    ctx.translate(0,canvas.height)
+    ctx.rotate(-90 * Math.PI / 180)
+    ctx.drawImage(img,0,0, img.width * test, img.height * test)
+   }
+   else if(dg==0 || dg==360 ||dg==-360){
+    canvas.setAttribute("width", img.width*test)
+    canvas.setAttribute("height", img.height*test)
+    ctx.translate(0,0)
+    ctx.rotate(dg * Math.PI / 180)
+    ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
+   }
    }
    setBrightness()
 }
+
+//    ctx.fillStyle = 'blue';
+//ctx.fillRect(0, 0,600, 337);
 
   function checkvanvs() {
     setFile(null)
@@ -176,12 +209,12 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
-        <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1)}} ver={function(){flippinTime(-1,1)}}/>
-        <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){flippinTime("left",-1)}} ver={function(){flippinTime("right",1)}}/> 
+        <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
+        <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
         </Options>
         
         <ImageUpload canvaRef={canva} imageRef={image} src={file} >
-        <CropDrag/>
+      
           </ImageUpload>
       </div>
     );

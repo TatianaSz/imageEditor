@@ -11,6 +11,8 @@
     background-color:red;
     position:relative;
     margin:0;
+    max-height:600px;
+    max-width:600px;
 }
 .hand{
     width:20px;
