@@ -5,6 +5,7 @@ import ImageUpload from './ImageUpload';
 import Uploader from './Uploader'
 import Delete from './Delete'
 import Slider from './Slider'
+import Filters from "./Filters"
 import Flippin from './Flippin'
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
@@ -16,34 +17,51 @@ function App() {
   const canva = useRef(null);
   const image = useRef(null);
   const list = useRef(null);
+  const filterCanva = useRef(null)
 
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
   const [cont, setCont] = useState(0);
   const [sat, setSat] = useState(100);
   const [menus, setMenus] = useState("0")
- const [test, setTest] =useState([])
+  const [test, setTest] =useState([])
+  const [scaleF, setScaleFill]=useState(0)
   let a;
 
   function addFile(e){
-  URL.revokeObjectURL(file)
+   URL.revokeObjectURL(file)
    setFile(
-    URL.createObjectURL(e.target.files[0])
+     URL.createObjectURL(e.target.files[0])
     )
   }
   useEffect(() => {   
     const canvas = canva.current;
     const ctx = canvas.getContext("2d")
     const img = image.current;
+    if(menus==1){
+      const filterCanvas = filterCanva.current;
+      for(let i=0; i<filterCanvas.children.length; i++){
+        const filterCanvasCurrent=filterCanvas.children[i].children[0]
+        const filterCanvasAll = filterCanvas.children[0].children[0]
+        const fctx = filterCanvasCurrent.getContext("2d")
+        var scaleToFill = Math.max(filterCanvasAll.width / img.width, filterCanvasAll.height / img.height)
+        setScaleFill(scaleToFill)
+        var x = (filterCanvasAll.width / 2) - (img.width / 2) * scaleF;
+       var y = (filterCanvasAll.height / 2) - (img.height / 2) * scaleF;
+       fctx.drawImage(img, x,y, img.width*scaleF, img.height*scaleF)
+      }
+    }
+   
     img.onload=()=>{
      var scale = Math.min(canvas.width / img.width, canvas.height / img.height);
      canvas.width=img.width*scale
      canvas.height=img.height*scale
      ctx.drawImage(img, 0, 0, img.width * scale, img.height * scale);
      setTest(scale)
+     
     }
+  });
 
- });
  const canvas = canva.current;
  const img = image.current;
  let iD;
@@ -76,24 +94,24 @@ function App() {
   
   for(var i = 0; i < dA.length; i += 4)
   {
-      var red = dA[i]; // Extract original red color [0 to 255]. Similarly for green and blue below
-      var green = dA[i + 1];
-      var blue = dA[i + 2];
+    var red = dA[i]; // Extract original red color [0 to 255]. Similarly for green and blue below
+    var green = dA[i + 1];
+    var blue = dA[i + 2];
   
-      var saturatedRed = (az*red + bz*green + cz*blue);
-      var saturatedGreen = (dz*red + ez*green + fz*blue);
-      var saturateddBlue = (gz*red + hz*green + iz*blue);
+    var saturatedRed = (az*red + bz*green + cz*blue);
+    var saturatedGreen = (dz*red + ez*green + fz*blue);
+    var saturateddBlue = (gz*red + hz*green + iz*blue);
   
-      dA[i] = saturatedRed;
-      dA[i + 1] = saturatedGreen;
-      dA[i + 2] = saturateddBlue;
+    dA[i] = saturatedRed;
+    dA[i + 1] = saturatedGreen;
+    dA[i + 2] = saturateddBlue;
   }
      
-   for(var i = 0; i < dA.length; i += 4)
-     {
-      dA[i] += 255 * (val / 100);
-      dA[i+1] += 255 * (val / 100);
-     dA[i+2] += 255 * (val / 100);
+  for(var i = 0; i < dA.length; i += 4)
+  {
+    dA[i] += 255 * (val / 100);
+    dA[i+1] += 255 * (val / 100);
+    dA[i+2] += 255 * (val / 100);
   }
   
   var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
@@ -114,24 +132,20 @@ function flippinTime(wziu, bziu, dg){
      if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
        ctx.translate(0,canvas.height);
        ctx.scale(1,-1)
-       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
       }
      else if(dg==90||dg==-270||dg==270||dg==-90){
        ctx.translate(canvas.height,0); 
        ctx.scale(-1,1)
-       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
       }
     }
    else if(wziu==-1){
      if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
        ctx.translate(canvas.width,0); 
        ctx.scale(-1,1)
-       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
       }
      else if(dg==90||dg==-270||dg==270||dg==-90){
        ctx.translate(0,canvas.width); 
        ctx.scale(1,-1)
-       ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
       }
     }
    else {
@@ -141,28 +155,24 @@ function flippinTime(wziu, bziu, dg){
     canvas.setAttribute("height", img.width*test)
     ctx.translate(canvas.width,0)
     ctx.rotate(dg * Math.PI / 180)
-    ctx.drawImage(img,0,0, img.width * test, img.height * test)
    }
    else if(dg==180||dg==-180){
     canvas.setAttribute("width", img.width*test)
     canvas.setAttribute("height", img.height*test)
     ctx.translate(canvas.width,canvas.height)
     ctx.rotate(dg * Math.PI / 180)
-    ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
    }
    else if(dg==270||dg==-90){
     canvas.setAttribute("width", img.height*test)
     canvas.setAttribute("height", img.width*test)
     ctx.translate(0,canvas.height)
     ctx.rotate(-90 * Math.PI / 180)
-    ctx.drawImage(img,0,0, img.width * test, img.height * test)
    }
    else if(dg==0 || dg==360 ||dg==-360){
     canvas.setAttribute("width", img.width*test)
     canvas.setAttribute("height", img.height*test)
     ctx.translate(0,0)
     ctx.rotate(dg * Math.PI / 180)
-    ctx.drawImage(img, 0, 0, img.width * test, img.height * test);
    }
    }
    setBrightness()
@@ -198,6 +208,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
     }
     setMenus(a)
   }
+  
 }
 
     return (
@@ -209,6 +220,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
         <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
         <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
         <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
+        <Filters op={menus} filterCanvaRef={filterCanva} />
         <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
         <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
         </Options>
