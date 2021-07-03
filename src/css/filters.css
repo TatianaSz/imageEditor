@@ -9,6 +9,7 @@
     height:120px;
     background-color:red;
     border-radius: 10px;
+    cursor:pointer;
 
 }
 .filters--option__canva{

@@ -50,6 +50,8 @@ function App() {
         var x = (filterCanvasAll.width / 2) - (img.width / 2) * scaleF;
         var y = (filterCanvasAll.height / 2) - (img.height / 2) * scaleF;
        fctx.drawImage(img, x,y, img.width*scaleF, img.height*scaleF)
+       fctx.fillStyle= 'rgba(207,194,15,0.36)'
+       fctx.fillRect(x,y, img.width*scaleF, img.height*scaleF)
       }
     }
    
@@ -73,7 +75,7 @@ function App() {
  
  }
  
-  function setBrightness(e){
+  function setBrightness(van, conn, satn){
    if(img.width){ //checks if image is even there in case someone tried to lighten nothing
  
    reDraw()
@@ -123,7 +125,7 @@ function App() {
     dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
   }
   canvas.getContext('2d').putImageData(iD, 0, 0);
-
+console.log(val, cont,sat)
   }
 }
 let dg=0;
@@ -211,21 +213,29 @@ function menu(e){ //ads background colors and sets menu state that allows to det
   }
 }
 
+function applyFilter(van, conn, satn){
+setVal(van)
+setCont(conn)
+setSat(satn)
+setBrightness(van, conn, satn)
+}
+
     return (
       <div className="app">
         <Menu menuRef={list}  onClick={menu} />
         <Options>
-        <Uploader op={menus}   onChange={addFile}/>
-        <Delete op={menus} onClick={checkvanvs}/>
-        <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
-        <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
-        <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
-        <Filters op={menus} filterCanvaRef={filterCanva}>
-          <FiltersOpt op={menus}/>
-        </Filters>
-        <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
-        <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-        </Options>
+          <Uploader op={menus}   onChange={addFile}/>
+          <Delete op={menus} onClick={checkvanvs}/>
+          <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
+          <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
+          <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
+          <Filters op={menus} filterCanvaRef={filterCanva}>
+            <FiltersOpt op={menus} title="Normal" onClick={()=>applyFilter(0,0,100)}/>
+            <FiltersOpt op={menus} title="Gloomy days" onClick={()=>applyFilter(0,-21,139)}/>
+          </Filters>
+          <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
+          <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
+          </Options>
         
         <ImageUpload canvaRef={canva} imageRef={image} src={file} >
       

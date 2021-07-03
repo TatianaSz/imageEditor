@@ -7,7 +7,7 @@ function Filters(props){
     return(
         <div className="slider-container">
             <div>Choose a filter:</div>
-            <div ref={props.filterCanvaRef} className="filters">
+            <div ref={props.filterCanvaRef}  className="filters">
                 {props.children}
             </div>
         </div>
