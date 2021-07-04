@@ -80,13 +80,12 @@ function App() {
  
   function setBrightness(van, conn, satn){
    if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
- 
    reDraw()
    iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
    dA = iD.data;
-   
+   // (typeof satn === "undefined"?sat:satn)
 
-  var sv = (sat/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
+  var sv = ((typeof satn === "undefined"?sat:satn)/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
 
   var az = (1 - sv)*0.3086 + sv;
   var bz = (1 - sv)*0.6094;
@@ -115,12 +114,12 @@ function App() {
      
   for(var i = 0; i < dA.length; i += 4)
   {
-    dA[i] += 255 * (val / 100);
-    dA[i+1] += 255 * (val / 100);
-    dA[i+2] += 255 * (val / 100);
+    dA[i] += 255 * ((typeof van === "undefined"?val:van) / 100);
+    dA[i+1] += 255 * ((typeof van === "undefined"?val:van) / 100);
+    dA[i+2] += 255 * ((typeof van === "undefined"?val:van) / 100);
   }
   
-  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
+  var factor = (259.0 * ((typeof conn === "undefined"?cont:conn) + 255.0)) / (255.0 * (259.0 - (typeof conn === "undefined"?cont:conn)));
 
   for (var i = 0; i < dA.length; i+= 4) {
     dA[i] = (factor * (dA[i] - 128.0) + 128.0);
@@ -221,7 +220,6 @@ function applyFilter(van, conn, satn){
 setVal(van)
 setCont(conn)
 setSat(satn)
-setBrightness(van, conn, satn)
 }
 
     return (
