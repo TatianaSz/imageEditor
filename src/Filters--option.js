@@ -5,7 +5,7 @@ import './css/slider.css'
 function FiltersOpt(props){
     if(props.op=="1"){
     return(
-      <div className="filters--option" onClick={props.onClick}><canvas className="filters--option__canva" /><div>{props.title}</div></div>  
+      <div className="filters--option"  onClick={props.onClick}><canvas className={`filters--option__canva filter--option__${props.class}`} /><div>{props.title}</div></div>  
     )
     }
     else{

@@ -7,12 +7,28 @@
     margin:1rem;
     width:40%;
     height:120px;
-    background-color:red;
+    background-color:#292929;
     border-radius: 10px;
     cursor:pointer;
 
 }
 .filters--option__canva{
     width:100%;
-    height:100%
+    height:100%;
+    
+}
+.filter--option__gray{
+    filter: saturate(1%) brightness(88%) contrast(115%);
+}
+.filter--option__gloomy{
+    filter: contrast(79%) saturate(139%);
+}
+.filter--option__retro{
+    filter: contrast(85%) saturate(64%);
+}
+.filter--option__sweet{
+    filter: contrast(157%) saturate(55%);
+}
+.filter--option__sunny{
+    filter: contrast(121%) saturate(187%);
 }

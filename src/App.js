@@ -51,8 +51,8 @@ function App() {
         var x = (filterCanvasAll.width / 2) - (img.width / 2) * scaleF;
         var y = (filterCanvasAll.height / 2) - (img.height / 2) * scaleF;
        fctx.drawImage(img, x,y, img.width*scaleF, img.height*scaleF)
-       fctx.fillStyle= 'rgba(207,194,15,0.36)'
-       fctx.fillRect(x,y, img.width*scaleF, img.height*scaleF)
+      // fctx.fillStyle= 'rgba(207,194,15,0.36)'
+       //fctx.fillRect(x,y, img.width*scaleF, img.height*scaleF)
       }
     }
    
@@ -68,6 +68,10 @@ function App() {
 
   useEffect(()=>{setBrightness()},[val,sat,cont])
 
+function prop(){
+  console.log("załadowane canvasy")
+}
+
  const canvas = canva.current;
  const img = image.current;
  let iD;
@@ -75,15 +79,15 @@ function App() {
  function reDraw(){
    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
    canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
- 
  }
  
-  function setBrightness(van, conn, satn){
+  function setBrightness(van, conn, satn,iD){
    if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
    reDraw()
-   iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
+   iD=(typeof iD ==="undefined"?canvas.getContext('2d').getImageData(0, 0, img.width, img.height):iD)
+   //iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
    dA = iD.data;
-   // (typeof satn === "undefined"?sat:satn)
+   // (typeof satn === "undefined"?sat:satn)   canvas.getContext('2d').getImageData(0, 0, img.width, img.height)
 
   var sv = ((typeof satn === "undefined"?sat:satn)/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
 
@@ -232,8 +236,12 @@ setSat(satn)
           <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3)}} onClickLeft={()=>{setCont(cont-3)}}/> 
           <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3)}} onClickLeft={()=>{setSat(sat-3)}}/>
           <Filters op={menus} filterCanvaRef={filterCanva}>
-            <FiltersOpt op={menus} title="Normal" onClick={()=>applyFilter(0,0,100)}/>
-            <FiltersOpt op={menus} title="Gloomy days" onClick={()=>applyFilter(0,-21,139)}/>
+            <FiltersOpt op={menus} class="normal" title="Normal" onClick={()=>applyFilter(0,0,100)}/>
+            <FiltersOpt op={menus} class="gloomy" title="Gloomy days" onClick={()=>applyFilter(0,-21,139)}/>
+            <FiltersOpt op={menus} class="gray" title="Grayscale" onClick={()=>applyFilter(-12,15,1)}/>
+            <FiltersOpt op={menus} class="retro" title="Retro" onClick={()=>applyFilter(0,-15,64)}/>
+            <FiltersOpt op={menus} class="sunny" title="Sunny beach" onClick={()=>applyFilter(0,21,187)}/>
+            <FiltersOpt op={menus} class="sweet" title="Sweet rose" onClick={()=>applyFilter(0,57,55)}/>
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
