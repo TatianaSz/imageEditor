@@ -28,6 +28,7 @@ function App() {
   const [test, setTest] =useState([])
   const [scaleF, setScaleFill]=useState(0)
   let a;
+  
 
   function addFile(e){
    URL.revokeObjectURL(file)
@@ -65,6 +66,8 @@ function App() {
     }
   });
 
+  useEffect(()=>{setBrightness()},[val,sat,cont])
+
  const canvas = canva.current;
  const img = image.current;
  let iD;
@@ -76,7 +79,7 @@ function App() {
  }
  
   function setBrightness(van, conn, satn){
-   if(img.width){ //checks if image is even there in case someone tried to lighten nothing
+   if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
  
    reDraw()
    iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
@@ -213,6 +216,7 @@ function menu(e){ //ads background colors and sets menu state that allows to det
   }
 }
 
+
 function applyFilter(van, conn, satn){
 setVal(van)
 setCont(conn)
@@ -226,9 +230,9 @@ setBrightness(van, conn, satn)
         <Options>
           <Uploader op={menus}   onChange={addFile}/>
           <Delete op={menus} onClick={checkvanvs}/>
-          <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={function(){setVal(val+3); setBrightness()}} onClickLeft={()=>{setVal(val-3); setBrightness()}} />
-          <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3); setBrightness()}} onClickLeft={()=>{setCont(cont-3); setBrightness()}}/> 
-          <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3); setBrightness()}} onClickLeft={()=>{setSat(sat-3); setBrightness()}}/>
+          <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>setVal(val+3)} onClickLeft={()=>{setVal(val-3)}} />
+          <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3)}} onClickLeft={()=>{setCont(cont-3)}}/> 
+          <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3)}} onClickLeft={()=>{setSat(sat-3)}}/>
           <Filters op={menus} filterCanvaRef={filterCanva}>
             <FiltersOpt op={menus} title="Normal" onClick={()=>applyFilter(0,0,100)}/>
             <FiltersOpt op={menus} title="Gloomy days" onClick={()=>applyFilter(0,-21,139)}/>
