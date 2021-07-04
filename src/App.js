@@ -68,9 +68,6 @@ function App() {
 
   useEffect(()=>{setBrightness()},[val,sat,cont])
 
-function prop(){
-  console.log("załadowane canvasy")
-}
 
  const canvas = canva.current;
  const img = image.current;
@@ -198,6 +195,8 @@ function flippinTime(wziu, bziu, dg){
         alert('Empty!');
     else
     ctx.clearRect(0, 0, cnv.width, cnv.height)
+    cnv.width=600;
+    cnv.height=600;
         
 };
 
