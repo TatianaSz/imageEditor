@@ -71,8 +71,8 @@ function App() {
 
  const canvas = canva.current;
  const img = image.current;
- let iD;
- let dA;
+ //let iD;
+ //let dA;
  function reDraw(){
    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
    canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
@@ -81,9 +81,9 @@ function App() {
   function setBrightness(van, conn, satn,iD){
    if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
    reDraw()
-   iD=(typeof iD ==="undefined"?canvas.getContext('2d').getImageData(0, 0, img.width, img.height):iD)
+    let iD=(typeof iD ==="undefined"?canvas.getContext('2d').getImageData(0, 0, img.width, img.height):iD)
    //iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
-   dA = iD.data;
+   let dA = iD.data;
    // (typeof satn === "undefined"?sat:satn)   canvas.getContext('2d').getImageData(0, 0, img.width, img.height)
 
   var sv = ((typeof satn === "undefined"?sat:satn)/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
@@ -197,6 +197,9 @@ function flippinTime(wziu, bziu, dg){
     ctx.clearRect(0, 0, cnv.width, cnv.height)
     cnv.width=600;
     cnv.height=600;
+    setVal(0)
+    setCont(0)
+    setSat(100)
         
 };
 
