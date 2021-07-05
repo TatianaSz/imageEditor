@@ -244,10 +244,10 @@ let isDown = false;
   let startY = null;
   let basicDimensions=[]
 
-  function drawShapes(coordinates){
+  function drawShapes(){
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
   basicDimensions.forEach(dim=>drawChosen(dim))
-  //drawChosen(coordinates)
+ 
   
 }
 function drawChosen(dim){
@@ -317,7 +317,8 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 200, h: 50 });drawShapes({ x: 100, y: 120, w: 200, h: 50 });}} />
+          <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 200, h: 50 });drawShapes();}} />
+          <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 20, h: 150 });drawShapes();}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} onMouseDown={handleMouseDown}

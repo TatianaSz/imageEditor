@@ -1,9 +1,10 @@
 import React from 'react'
+import './css/shapes.css'
 
 function Shapes(props){
 if(props.op=="4"){
     return(
-        <button onClick={props.onClick}>
+        <button className="shape-button" onClick={props.onClick}>
                 coś do klikniecia
         </button>
     )

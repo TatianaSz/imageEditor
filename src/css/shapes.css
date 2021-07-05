@@ -1,0 +1,11 @@
+.shape-button{
+    background-color:#292929;
+    outline:none;
+    cursor:pointer;
+    color:#dedede;
+    text-align:center;
+    border-radius:10px;
+    display: inline-block;
+    border: none;
+    padding: 1rem 2rem;
+}
