@@ -226,12 +226,8 @@ function menu(e){ //ads background colors and sets menu state that allows to det
     setMenus(a)
   }
   if(a==4){
-  //   let oGrayImg = new Image();
-  //   oGrayImg.src=URL.createObjectURL(canvas.toDataURL())
-  //   //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-  //  // canvas.getContext("2d").drawImage(oGrayImg, 0, 0, oGrayImg.width,  oGrayImg.height);
-  //   //canvas.getContext("2d").drawImage(filteredCanvas,0, 0, img.width * test, img.height * test)
-  //   console.log(oGrayImg.src)
+    shapeCanvas.width=canvas.width
+  shapeCanvas.height=canvas.height;
   }
 }
 
@@ -246,15 +242,16 @@ let isDown = false;
   let dragTarget = null;
   let startX = null;
   let startY = null;
-  let basicDimensions=[{x:0,y:0,w:100,h:100}]
+  let basicDimensions=[]
 
-  function drawShapes(){
+  function drawShapes(coordinates){
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
-  basicDimensions.map(drawChosen)
+  basicDimensions.forEach(dim=>drawChosen(dim))
+  //drawChosen(coordinates)
+  
 }
 function drawChosen(dim){
-  shapeCanvas.width=canvas.width
-  shapeCanvas.height=canvas.height;
+  
   let ctx = shapeCanvas.getContext("2d")
   let {x,y,w,h} = dim;
  ctx.beginPath();
@@ -320,7 +317,7 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} onClick={drawShapes} />
+          <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 200, h: 50 });drawShapes({ x: 100, y: 120, w: 200, h: 50 });}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} onMouseDown={handleMouseDown}
