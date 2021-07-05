@@ -8,6 +8,7 @@ import Slider from './Slider'
 import Filters from "./Filters"
 import FiltersOpt from "./Filters--option"
 import Flippin from './Flippin'
+import Shapes from './Shapes'
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
@@ -19,6 +20,7 @@ function App() {
   const image = useRef(null);
   const list = useRef(null);
   const filterCanva = useRef(null)
+  const shapeCanva = useRef(null)
 
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
@@ -34,12 +36,15 @@ function App() {
    URL.revokeObjectURL(file)
    setFile(
      URL.createObjectURL(e.target.files[0])
+     
     )
+    console.log(URL.createObjectURL(e.target.files[0]),e.target.files[0])
   }
   useEffect(() => {   
     const canvas = canva.current;
     const ctx = canvas.getContext("2d")
     const img = image.current;
+    //console.log(img)
     if(menus==1){
       const filterCanvas = filterCanva.current;
       for(let i=0; i<filterCanvas.children.length; i++){
@@ -71,6 +76,7 @@ function App() {
 
  const canvas = canva.current;
  const img = image.current;
+ const shapeCanvas = shapeCanva.current;
  //let iD;
  //let dA;
  function reDraw(){
@@ -128,7 +134,7 @@ function App() {
     dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
   }
   canvas.getContext('2d').putImageData(iD, 0, 0);
-console.log(val, cont,sat)
+//console.log(val, cont,sat)
   }
 }
 let dg=0;
@@ -219,6 +225,14 @@ function menu(e){ //ads background colors and sets menu state that allows to det
     }
     setMenus(a)
   }
+  if(a==4){
+  //   let oGrayImg = new Image();
+  //   oGrayImg.src=URL.createObjectURL(canvas.toDataURL())
+  //   //canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+  //  // canvas.getContext("2d").drawImage(oGrayImg, 0, 0, oGrayImg.width,  oGrayImg.height);
+  //   //canvas.getContext("2d").drawImage(filteredCanvas,0, 0, img.width * test, img.height * test)
+  //   console.log(oGrayImg.src)
+  }
 }
 
 
@@ -226,6 +240,65 @@ function applyFilter(van, conn, satn){
 setVal(van)
 setCont(conn)
 setSat(satn)
+}
+
+let isDown = false;
+  let dragTarget = null;
+  let startX = null;
+  let startY = null;
+  let basicDimensions=[{x:0,y:0,w:100,h:100}]
+
+  function drawShapes(){
+    shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
+  basicDimensions.map(drawChosen)
+}
+function drawChosen(dim){
+  shapeCanvas.width=canvas.width
+  shapeCanvas.height=canvas.height;
+  let ctx = shapeCanvas.getContext("2d")
+  let {x,y,w,h} = dim;
+ ctx.beginPath();
+   ctx.fillStyle = "blue";
+    ctx.fillRect(x, y, w, h);
+   // console.log(x,y,w,h)
+}
+const hitBox = (x, y) => {
+  let isTarget = null;
+  for (let i = 0; i <basicDimensions.length; i++) {
+    const box = basicDimensions[i];
+    if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
+      dragTarget = box;
+      isTarget = true;
+      break;
+    }
+  }
+  return isTarget;
+}
+const handleMouseDown = e => {
+  startX = parseInt(e.nativeEvent.offsetX - shapeCanvas.clientLeft);
+  startY = parseInt(e.nativeEvent.offsetY - shapeCanvas.clientTop);
+  isDown = hitBox(startX, startY);
+}
+
+const handleMouseMove = e => {
+  if (!isDown) return;
+
+  const mouseX = parseInt(e.nativeEvent.offsetX - shapeCanvas.clientLeft);
+  const mouseY = parseInt(e.nativeEvent.offsetY - shapeCanvas.clientTop);
+  const dx = mouseX - startX;
+  const dy = mouseY - startY;
+  startX = mouseX;
+  startY = mouseY;
+  dragTarget.x += dx;
+  dragTarget.y += dy;
+  drawShapes();
+}
+const handleMouseUp = e => {
+  dragTarget = null;
+  isDown = false;
+}
+const handleMouseOut = e => {
+  handleMouseUp(e);
 }
 
     return (
@@ -247,9 +320,13 @@ setSat(satn)
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
+          <Shapes op={menus} onClick={drawShapes} />
           </Options>
         
-        <ImageUpload canvaRef={canva} imageRef={image} src={file} >
+        <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseOut={handleMouseOut} >
       
           </ImageUpload>
       </div>
