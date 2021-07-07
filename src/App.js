@@ -10,9 +10,12 @@ import FiltersOpt from "./Filters--option"
 import Flippin from './Flippin'
 import Writing from './Writing'
 import Shapes from './Shapes'
+import Inpute from './Inpute'
+import DeleteDrawing from "./DeleteDrawing"
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
+import Convolute from './Convolute';
 
 
 
@@ -31,6 +34,9 @@ function App() {
   const [test, setTest] =useState([])
   const [scaleF, setScaleFill]=useState(0)
   const [dimensionArray, setDimensionArray]=useState([])
+  let [inputVal, setInput] =useState("write smth")
+  let [inputColor, setInputColor] =useState("black")
+  let [font, setFont] = useState(null)
   let a;
   
 
@@ -249,7 +255,10 @@ setSat(satn)
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h,color,shape} = dim;
+  let {x,y,w,h,color,shape,text,ffont} = dim;
+  switch(shape){
+    
+  }
   if(shape==="rectangle"){
     ctx.beginPath(); //rectangle
     ctx.fillStyle = color;
@@ -261,8 +270,8 @@ function draw(dim){
       ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
       ctx.fillRect(x, y, w, h);
       ctx.restore()
-     ctx.font = "30px Arial";
-      ctx.fillText("Hello World", x, y+(h/2));  
+     ctx.font = "30px" + " " + ffont;
+      ctx.fillText(text, x, y+(h/2));  
     }
   else{
     ctx.beginPath(); //triangle
@@ -324,6 +333,18 @@ const handleMouseOut = e => {
   isDown = false;
 }
 
+function inputChange(e){
+  setInput(e.target.value);
+}
+function giveInputColor(e){
+setInputColor(e.target.value)
+}
+
+function changeFont(){
+console.log('działa')
+setFont('Festive')
+}
+
     return (
       <div className="app">
         <Menu menuRef={list}  onClick={menu} />
@@ -343,10 +364,12 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Writing op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"black", shape:"words" }]);}}/>
+          <Writing op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font}]);}}/>
+          <Inpute op={menus}  type="text" onChange={inputChange}/>
+          <Inpute op={menus} type="color" onChange={giveInputColor}/>
           <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
-          <Shapes op={menus} name="Delete" onClick={()=>{setDimensionArray([]);}} />
+          <DeleteDrawing op={menus} name="Delete" onClick={()=>{setDimensionArray([]);}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 

@@ -4,7 +4,7 @@ import React from "react"
 function Convolute(props){
 
     return(
-        <button onClick={props.onClick}>convolu</button>
+        <button onClick={props.onClick}>Festive font</button>
     )
 }
 
