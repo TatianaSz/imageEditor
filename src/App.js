@@ -8,6 +8,7 @@ import Slider from './Slider'
 import Filters from "./Filters"
 import FiltersOpt from "./Filters--option"
 import Flippin from './Flippin'
+import Writing from './Writing'
 import Shapes from './Shapes'
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
@@ -29,6 +30,7 @@ function App() {
   const [menus, setMenus] = useState("0")
   const [test, setTest] =useState([])
   const [scaleF, setScaleFill]=useState(0)
+  const [dimensionArray, setDimensionArray]=useState([])
   let a;
   
 
@@ -243,49 +245,63 @@ let isDown = false;
   let startX = null;
   let startY = null;
   let basicDimensions=[] //array with every drawn element
-  let w;
+  
   
   function drawShapes(){
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
-  basicDimensions.forEach(dim=>w(dim))
+    dimensionArray.forEach(dim=>draw(dim))
 }
-function drawRect(dim){
+function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
   let {x,y,w,h} = dim;
-  // ctx.beginPath();
-  //  ctx.fillStyle = "blue";
-  //   ctx.fillRect(x, y, 30, 50);
   ctx.beginPath();
-    ctx.moveTo(x,y);
-    ctx.lineTo(x+80,y);
-    ctx.lineTo(x,y+80);
-    ctx.fill();
-   // console.log(x,y,w,h)
+  ctx.fillStyle = 'green';
+  ctx.fillRect(x, y, w, h);
+
+//   ctx.beginPath();
+//   ctx.fillStyle = 'green';
+//   ctx.save();
+//    ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
+//     ctx.fillRect(x, y, 30, 50);
+//     ctx.restore()
+//     ctx.font = "30px Arial";
+// ctx.fillText("Hello World", x, y); 
+    
+  // ctx.beginPath();
+  //   ctx.moveTo(x,y);
+  //   ctx.lineTo(x+80,y);
+  //   ctx.lineTo(x,y+80);
+  //   ctx.fill();
+  
 }
 
 const hitBox = (x, y) => {
-  let isTarget = null;
-  for (let i = 0; i <basicDimensions.length; i++) {
-    const box = basicDimensions[i];
+  let isTarget = true;
+  console.log(dimensionArray)
+  for (let i = 0; i <dimensionArray.length; i++) {
+    const box = dimensionArray[i];
     if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
       dragTarget = box; //currently dragged element
       isTarget = true;
+      console.log(dragTarget, isTarget)
       break;
     }
   }
   return isTarget;
 }
 const handleMouseDown = e => {
-  startX = parseInt(e.nativeEvent.offsetX - shapeCanvas.clientLeft);
-  startY = parseInt(e.nativeEvent.offsetY - shapeCanvas.clientTop);
+  startX = parseInt(e.nativeEvent.offsetX)// - shapeCanvas.clientLeft);
+  startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY);
+ // console.log("mousedown") sie wywoluje
+ //console.log( startX, startY) //działa poprawnie
 }
 
 const handleMouseMove = e => {
   if (!isDown) return;
 
-  const mouseX = parseInt(e.nativeEvent.offsetX - shapeCanvas.clientLeft);
-  const mouseY = parseInt(e.nativeEvent.offsetY - shapeCanvas.clientTop);
+  const mouseX = parseInt(e.nativeEvent.offsetX)
+  const mouseY = parseInt(e.nativeEvent.offsetY)
   const dx = mouseX - startX;
   const dy = mouseY - startY;
   startX = mouseX;
@@ -293,13 +309,16 @@ const handleMouseMove = e => {
   dragTarget.x += dx;
   dragTarget.y += dy;
   drawShapes();
+ //console.log(startX,startY,dragTarget.x, dragTarget.y)
 }
 const handleMouseUp = e => {
   dragTarget = null;
   isDown = false;
 }
 const handleMouseOut = e => {
-  handleMouseUp(e);
+  dragTarget = null;
+  isDown = false;
+ 
 }
 
     return (
@@ -321,8 +340,8 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} onClick={()=>{w=drawRect ;basicDimensions.push({ x: 100, y: 120, w: 200, h: 50 });drawShapes();}} />
-          <Shapes op={menus} onClick={()=>{w=drawRect ;basicDimensions.push({ x: 100, y: 120, w: 20, h: 150 });drawShapes();}} />
+          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50 }]);drawShapes();}} />
+          <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 20, h: 150 });drawShapes();}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} onMouseDown={handleMouseDown}
