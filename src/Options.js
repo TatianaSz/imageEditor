@@ -3,7 +3,7 @@ import "./css/options.css"
 
 function Options(props){
     return (
-        <div  className="options" >
+        <div className="options" >
         {props.children}
         </div>
     )

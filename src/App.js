@@ -38,9 +38,7 @@ function App() {
    URL.revokeObjectURL(file)
    setFile(
      URL.createObjectURL(e.target.files[0])
-     
     )
-    console.log(URL.createObjectURL(e.target.files[0]),e.target.files[0])
   }
   useEffect(() => {   
     const canvas = canva.current;
@@ -79,8 +77,6 @@ function App() {
  const canvas = canva.current;
  const img = image.current;
  const shapeCanvas = shapeCanva.current;
- //let iD;
- //let dA;
  function reDraw(){
    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
    canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
@@ -240,40 +236,41 @@ setCont(conn)
 setSat(satn)
 }
 
-let isDown = false;
+  let isDown = false;
   let dragTarget = null;
   let startX = null;
   let startY = null;
-  let basicDimensions=[] //array with every drawn element
   
   
   function drawShapes(){
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
     dimensionArray.forEach(dim=>draw(dim))}
-}
+  }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h} = dim;
-  ctx.beginPath();
-  ctx.fillStyle = 'green';
-  ctx.fillRect(x, y, w, h);
+  let {x,y,w,h,color,shape} = dim;
+  if(shape==="rectangle"){
+    ctx.beginPath(); //rectangle
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);}
+  else{
+    ctx.beginPath(); //triangle
+    ctx.fillStyle = color;
+    ctx.moveTo(x,y);
+    ctx.lineTo(x+w,y);
+    ctx.lineTo(x,y+h);
+    ctx.fill();
+  }
 
-//   ctx.beginPath();
+//   ctx.beginPath(); //woords
 //   ctx.fillStyle = 'green';
 //   ctx.save();
 //    ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
 //     ctx.fillRect(x, y, 30, 50);
 //     ctx.restore()
 //     ctx.font = "30px Arial";
-// ctx.fillText("Hello World", x, y); 
-    
-  // ctx.beginPath();
-  //   ctx.moveTo(x,y);
-  //   ctx.lineTo(x+80,y);
-  //   ctx.lineTo(x,y+80);
-  //   ctx.fill();
-  
+// ctx.fillText("Hello World", x, y);  
 }
 
 const hitBox = (x, y) => {
@@ -315,7 +312,6 @@ const handleMouseUp = e => {
 const handleMouseOut = e => {
   dragTarget = null;
   isDown = false;
- 
 }
 
     return (
@@ -337,16 +333,16 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50 }]);}} />
-          <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 20, h: 150 });drawShapes();}} />
+          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
+          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
           </Options>
         
-        <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} onMouseDown={handleMouseDown}
+        <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
+        onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
-        onMouseOut={handleMouseOut} >
-      
-          </ImageUpload>
+        onMouseOut={handleMouseOut} />
+    
       </div>
     );
   
