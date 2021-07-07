@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Festive&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Bangers&family=Catamaran:wght@100&family=Cookie&family=Festive&family=Gloria+Hallelujah&family=Indie+Flower&family=Lobster&family=Nanum+Pen+Script&family=Pacifico&family=Permanent+Marker&family=Press+Start+2P&family=Sigmar+One&family=Yellowtail&display=swap');
 
 html{
     position:relative;
@@ -18,4 +18,33 @@ body{
     height:100%
 }
 
+/*
+  1  font-family: 'Amatic SC', cursive;
+
+font-family: 'Bangers', cursive;
+
+font-family: 'Catamaran', sans-serif;
+
+font-family: 'Cookie', cursive;
+
+font-family: 'Festive', cursive;
+
+font-family: 'Gloria Hallelujah', cursive;
+
+font-family: 'Indie Flower', cursive;
+
+font-family: 'Lobster', cursive;
+
+font-family: 'Nanum Pen Script', cursive;
+
+font-family: 'Pacifico', cursive;
+
+font-family: 'Permanent Marker', cursive;
+
+font-family: 'Press Start 2P', cursive;
+
+font-family: 'Sigmar One', cursive;
+
+font-family: 'Yellowtail', cursive;
+    */
 

@@ -1,0 +1,65 @@
+.font--container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content: center;
+}
+
+
+.font--option{
+    cursor:pointer;
+    background-color:#292929;
+    border-radius:10px;
+    font-size:1.2rem;
+    padding:.3rem;
+    margin:.2rem;
+    display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+    text-align: center;
+    width:40%;
+    height:100px;
+    
+}
+.Festive{
+    font-family:Festive;
+}
+.Cookie{
+    font-family:Cookie;
+}
+.Catamaran{
+    font-family:Catamaran;
+}
+.Bangers{
+    font-family:Bangers;
+}
+.Amatic{
+    font-family:Amatic SC;
+}
+.Gloria.Hallelujah{
+    font-family:Gloria Hallelujah;
+}
+.Indie.Flower{
+    font-family:Indie Flower;
+}
+.Lobster{
+    font-family:Lobster;
+}
+.Nanum.Pen.Script{
+    font-family:Nanum Pen Script;
+}
+.Pacifico{
+    font-family:Pacifico;
+}
+.Permanent.Marker{
+    font-family:Permanent Marker;
+}
+.Press.Start{
+    font-family:"Press Start 2P";
+}
+.Sigmar.One{
+    font-family:Sigmar One;
+}
+.Yellowtail{
+    font-family:Yellowtail;
+}

@@ -8,10 +8,11 @@ import Slider from './Slider'
 import Filters from "./Filters"
 import FiltersOpt from "./Filters--option"
 import Flippin from './Flippin'
-import Writing from './Writing'
 import Shapes from './Shapes'
 import Inpute from './Inpute'
 import DeleteDrawing from "./DeleteDrawing"
+import FontContainer from "./FontContainer"
+import ChooseFont from './ChooseFont'
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
@@ -364,11 +365,27 @@ setFont('Festive')
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Writing op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font}]);}}/>
+          <Shapes op={menus} generic="3" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font}]);}}/>
           <Inpute op={menus}  type="text" onChange={inputChange}/>
           <Inpute op={menus} type="color" onChange={giveInputColor}/>
-          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
-          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
+          <FontContainer op={menus} generic="3">
+            <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Catamaran" text="And where are all the gods?"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Bangers" text="'Til the morning light"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Amatic" text="Fresh from the fight"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Gloria Hallelujah" text="Larger than life"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Indie Flower" text="Somwhere after midnight"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Lobster" text="In my wildest fantasy"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Nanum Pen Script" text="Racing on the thunder"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Pacifico" text="Rising with the heat"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Permanent Marker" text="Sweep me off my feet"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Press Start 2P" text="Splits the sea"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Sigmar One" text="Where the mountains meet the heavens"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Yellowtail" text="Like the fire in my blood"  onClick={changeFont}/>
+          </FontContainer>
+          <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
+          <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
           <DeleteDrawing op={menus} name="Delete" onClick={()=>{setDimensionArray([]);}} />
           </Options>
         
