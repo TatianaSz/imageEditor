@@ -254,6 +254,16 @@ function draw(dim){
     ctx.beginPath(); //rectangle
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);}
+    else if(shape==="words"){
+      ctx.beginPath(); //woords
+     ctx.fillStyle = color;
+      ctx.save();
+      ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
+      ctx.fillRect(x, y, w, h);
+      ctx.restore()
+     ctx.font = "30px Arial";
+      ctx.fillText("Hello World", x, y+(h/2));  
+    }
   else{
     ctx.beginPath(); //triangle
     ctx.fillStyle = color;
@@ -333,8 +343,10 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
+          <Writing op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"black", shape:"words" }]);}}/>
           <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
+          <Shapes op={menus} name="Delete" onClick={()=>{setDimensionArray([]);}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
