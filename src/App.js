@@ -74,7 +74,7 @@ function App() {
   });
 
   useEffect(()=>{setBrightness()},[val,sat,cont])
-
+  useEffect(()=>{drawShapes()},[dimensionArray])
 
  const canvas = canva.current;
  const img = image.current;
@@ -248,8 +248,9 @@ let isDown = false;
   
   
   function drawShapes(){
+    if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
-    dimensionArray.forEach(dim=>draw(dim))
+    dimensionArray.forEach(dim=>draw(dim))}
 }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
@@ -283,7 +284,6 @@ const hitBox = (x, y) => {
     if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
       dragTarget = box; //currently dragged element
       isTarget = true;
-      console.log(dragTarget, isTarget)
       break;
     }
   }
@@ -293,8 +293,6 @@ const handleMouseDown = e => {
   startX = parseInt(e.nativeEvent.offsetX)// - shapeCanvas.clientLeft);
   startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY);
- // console.log("mousedown") sie wywoluje
- //console.log( startX, startY) //działa poprawnie
 }
 
 const handleMouseMove = e => {
@@ -309,7 +307,6 @@ const handleMouseMove = e => {
   dragTarget.x += dx;
   dragTarget.y += dy;
   drawShapes();
- //console.log(startX,startY,dragTarget.x, dragTarget.y)
 }
 const handleMouseUp = e => {
   dragTarget = null;
@@ -340,7 +337,7 @@ const handleMouseOut = e => {
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50 }]);drawShapes();}} />
+          <Shapes op={menus} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50 }]);}} />
           <Shapes op={menus} onClick={()=>{basicDimensions.push({ x: 100, y: 120, w: 20, h: 150 });drawShapes();}} />
           </Options>
         
