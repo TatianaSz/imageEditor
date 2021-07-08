@@ -27,6 +27,7 @@ function App() {
   const list = useRef(null);
   const filterCanva = useRef(null)
   const shapeCanva = useRef(null)
+  
 
   const [file, setFile] = useState(null);
   const [val, setVal] = useState(0);
@@ -38,9 +39,9 @@ function App() {
   const [dimensionArray, setDimensionArray]=useState([])
   let [inputVal, setInput] =useState("write smth")
   let [inputColor, setInputColor] =useState("black")
-  let [font, setFont] = useState(null)
+  let [font, setFont] = useState("Catamaran")
   let [size, setSize] = useState(20)
-  let [currentTarget, setCurrentTarget] = useState(null)
+  let plswork = useRef({ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size})
   let a;
   
 
@@ -84,6 +85,7 @@ function App() {
   useEffect(()=>{setBrightness()},[val,sat,cont])
   useEffect(()=>{drawShapes()},[dimensionArray])
   useEffect(()=>{drawShapes()},[font])
+ // useEffect(()=>{hitBox()},[dimensionArray])
 
  const canvas = canva.current;
  const img = image.current;
@@ -251,18 +253,11 @@ setSat(satn)
   let dragTarget = null;
   let startX = null;
   let startY = null;
-  let currentClicked=null
   
   function drawShapes(){
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
     dimensionArray.forEach(dim=>draw(dim))}
-    // if(dimensionArray[dimensionArray.length-1]&&startX == null){
-    //   setFont(font)
-    //   dimensionArray[dimensionArray.length-1].ffont=font;
-      
-    //   console.log(font)
-    // }
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
@@ -297,27 +292,30 @@ function draw(dim){
 
 const hitBox = (x, y) => {
   let isTarget = true;
-  console.log(dimensionArray)
   for (let i = 0; i <dimensionArray.length; i++) {
     const box = dimensionArray[i];
     if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
       dragTarget = box; //currently dragged element
+     // setCurrentTarget(box)
+      plswork.current=box;
+      console.log(plswork)
       isTarget = true;
-      setCurrentTarget(dragTarget)
       break;
     }
+    
   }
   return isTarget;
 }
+
 const handleMouseDown = e => {
   startX = parseInt(e.nativeEvent.offsetX)// - shapeCanvas.clientLeft);
   startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY);
+  
 }
 
 const handleMouseMove = e => {
   if (!isDown) return;
-
   const mouseX = parseInt(e.nativeEvent.offsetX)
   const mouseY = parseInt(e.nativeEvent.offsetY)
   const dx = mouseX - startX;
@@ -341,27 +339,35 @@ function inputChange(e){
   setInput(e.target.value);
 }
 function giveInputColor(e){
-  if(currentTarget==null){setInputColor(e.target.value)}
+  if(plswork.current.color==null){setInputColor(e.target.value)}
   else{
-    currentTarget.color=e.target.value
-    dimensionArray.splice(dimensionArray.indexOf(currentTarget),1,currentTarget)
+    plswork.current.color=e.target.value
+    dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
     drawShapes()
   }
 
 }
 function changeNumber(e){
-  if(currentTarget==null){setSize(e.target.value)}
-  currentTarget.fontSize=e.target.value
-  dimensionArray.splice(dimensionArray.indexOf(currentTarget),1,currentTarget)
+  if(plswork.current.fontSize==null){setSize(e.target.value)}
+  plswork.current.fontSize=e.target.value
+  dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
     drawShapes()
 }
 function changeFont(e){
-  if(currentTarget==null){setFont(e.target.dataset.fonts)}
-  else{
-currentTarget.ffont=e.target.dataset.fonts
-dimensionArray.splice(dimensionArray.indexOf(currentTarget),1,currentTarget)
+  if(plswork.current.ffont==null){setFont(e.target.dataset.fonts)}
+     else{
+plswork.current.ffont=e.target.dataset.fonts
+dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
 drawShapes()
   }
+}
+
+function deleteCurrent(){
+  // if(currentTarget==null) return
+  // console.log(currentTarget)
+  // const t=[...dimensionArray].splice(dimensionArray.indexOf(currentTarget),1)
+  // setDimensionArray(t)
+  // drawShapes()
 }
 
     return (
@@ -399,13 +405,13 @@ drawShapes()
             <ChooseFont op={menus} generic="3" chosen="Nanum Pen Script" text="Racing on the thunder"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Pacifico" text="Rising with the heat"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Permanent Marker" text="Sweep me off my feet"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Press Start 2P" text="Splits the sea"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="VT323" text="Splits the sea"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Sigmar One" text="Where the mountains meet the heavens"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Yellowtail" text="Like the fire in my blood"  onClick={changeFont}/>
           </FontContainer>
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
-          <DeleteDrawing op={menus} name="Delete" onClick={()=>{setDimensionArray([]);}} />
+          <DeleteDrawing op={menus} name="Delete" onClick={deleteCurrent} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
