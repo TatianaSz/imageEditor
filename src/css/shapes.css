@@ -5,7 +5,60 @@
     color:#dedede;
     text-align:center;
     border-radius:10px;
-    display: inline-block;
     border: none;
     padding: 1rem 2rem;
+    width:50%;
+    font-size:1.2rem;
+    display: block;
+    margin: 1rem auto;
+    animation-name: Loadeds;
+    animation-duration: .6s;
+    animation-fill-mode: forwards;
+}
+.input--container{
+    margin:2rem;
+    text-align:center;
+    animation-name: Loaded;
+    animation-duration: .6s;
+    animation-fill-mode: forwards;
+}
+@keyframes Loaded {
+    from {transform: translateX(-15%);opacity:0}
+    to {transform: translateX(0%);opacity:1;}
+}
+@keyframes Loadeds {
+    from {transform: translateX(-30%);opacity:0}
+    to {transform: translateX(0%);opacity:1;}
+}
+.input--label{
+    font-size:1.2rem;
+    
+}
+input[type=text],input[type=number]{
+background-color:#949494;
+border:none;
+outline:none;
+border-radius:10px;
+display:block;
+margin-left:auto;
+margin-right:auto;
+margin-top:.6rem;
+}
+input[type=color]{
+    position:absolute;
+    left:-7px;
+    top:-7px;
+    height:50px;
+    width:50px;
+}
+.color{
+    position:relative;
+    width:40px;
+    height:40px;
+    background-color:#373737;
+    border-radius:50%;
+    overflow:hidden;
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:.6rem;
 }

@@ -37,7 +37,7 @@ function App() {
   const [test, setTest] =useState([])
   const [scaleF, setScaleFill]=useState(0)
   const [dimensionArray, setDimensionArray]=useState([])
-  let [inputVal, setInput] =useState("write smth")
+  let [inputVal, setInput] =useState("")
   let [inputColor, setInputColor] =useState("black")
   let [font, setFont] = useState("Catamaran")
   let [size, setSize] = useState(20)
@@ -273,7 +273,7 @@ function draw(dim){
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.4)"
+      ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
       ctx.fillRect(x, y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
@@ -389,26 +389,28 @@ function deleteCurrent(){
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} generic="3" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size}]);}}/>
-          <Inpute op={menus}  type="text" onChange={inputChange}/>
-          <Inpute op={menus} type="color" onChange={giveInputColor}/>
-          <Inpute op={menus} type="number" onChange={changeNumber}/>
-          <FontContainer op={menus} generic="3">
-            <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Catamaran" text="And where are all the gods?"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Bangers" text="'Til the morning light"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Amatic SC" text="Fresh from the fight"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Gloria Hallelujah" text="Larger than life"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Indie Flower" text="Somwhere after midnight"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Lobster" text="In my wildest fantasy"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Nanum Pen Script" text="Racing on the thunder"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Pacifico" text="Rising with the heat"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Permanent Marker" text="Sweep me off my feet"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="VT323" text="Splits the sea"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Sigmar One" text="Where the mountains meet the heavens"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Yellowtail" text="Like the fire in my blood"  onClick={changeFont}/>
-          </FontContainer>
+          
+            <Inpute op={menus}  type="text" inputLabel="Write your text:" onChange={inputChange}/>
+            <Inpute op={menus} type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
+            <Inpute op={menus} type="number" inputLabel="Change text size:" onChange={changeNumber}/>
+            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size}]);}}/>
+            <FontContainer op={menus} generic="3">
+              <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Catamaran" text="And where are all the gods?"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Bangers" text="'Til the morning light"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Amatic SC" text="Fresh from the fight"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Gloria Hallelujah" text="Larger than life"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Indie Flower" text="Somwhere after midnight"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Lobster" text="In my wildest fantasy"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Nanum Pen Script" text="Racing on the thunder"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Pacifico" text="Rising with the heat"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Permanent Marker" text="Sweep me off my feet"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="VT323" text="Splits the sea"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Sigmar One" text="Where the mountains meet the heavens"  onClick={changeFont}/>
+              <ChooseFont op={menus} generic="3" chosen="Yellowtail" text="Like the fire in my blood"  onClick={changeFont}/>
+            </FontContainer>
+         
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
           <DeleteDrawing op={menus} name="Delete" onClick={deleteCurrent} />
