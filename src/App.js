@@ -41,7 +41,7 @@ function App() {
   let [inputColor, setInputColor] =useState("black")
   let [font, setFont] = useState("Catamaran")
   let [size, setSize] = useState(20)
-  let plswork = useRef({ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size})
+  let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size})
   let a;
   
 
@@ -85,7 +85,7 @@ function App() {
   useEffect(()=>{setBrightness()},[val,sat,cont])
   useEffect(()=>{drawShapes()},[dimensionArray])
   useEffect(()=>{drawShapes()},[font])
- // useEffect(()=>{hitBox()},[dimensionArray])
+ 
 
  const canvas = canva.current;
  const img = image.current;
@@ -273,7 +273,7 @@ function draw(dim){
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
+      ctx.fillStyle = "rgba(255, 255, 255, 0.1)"
       ctx.fillRect(x, y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
@@ -298,7 +298,6 @@ const hitBox = (x, y) => {
       dragTarget = box; //currently dragged element
      // setCurrentTarget(box)
       plswork.current=box;
-      console.log(plswork)
       isTarget = true;
       break;
     }
@@ -337,38 +336,27 @@ const handleMouseOut = e => {
 
 function inputChange(e){
   setInput(e.target.value);
+
 }
 function giveInputColor(e){
-  if(plswork.current.color==null){setInputColor(e.target.value)}
-  else{
+    setInputColor(e.target.value)
     plswork.current.color=e.target.value
     dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
     drawShapes()
-  }
-
 }
 function changeNumber(e){
-  if(plswork.current.fontSize==null){setSize(e.target.value)}
+  setSize(e.target.value)
   plswork.current.fontSize=e.target.value
   dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
     drawShapes()
 }
 function changeFont(e){
-  if(plswork.current.ffont==null){setFont(e.target.dataset.fonts)}
-     else{
+      setFont(e.target.dataset.fonts)
 plswork.current.ffont=e.target.dataset.fonts
 dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
 drawShapes()
-  }
 }
 
-function deleteCurrent(){
-  // if(currentTarget==null) return
-  // console.log(currentTarget)
-  // const t=[...dimensionArray].splice(dimensionArray.indexOf(currentTarget),1)
-  // setDimensionArray(t)
-  // drawShapes()
-}
 
     return (
       <div className="app">
@@ -413,7 +401,7 @@ function deleteCurrent(){
          
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
-          <DeleteDrawing op={menus} name="Delete" onClick={deleteCurrent} />
+          <DeleteDrawing op={menus} name="Delete" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray].filter((element, index)=>index!=(dimensionArray.indexOf(plswork.current))));console.log(dimensionArray)}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
