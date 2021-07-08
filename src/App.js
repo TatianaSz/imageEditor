@@ -17,6 +17,7 @@ import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 import Convolute from './Convolute';
+import { IoSwapHorizontalOutline } from 'react-icons/io5';
 
 
 
@@ -38,6 +39,8 @@ function App() {
   let [inputVal, setInput] =useState("write smth")
   let [inputColor, setInputColor] =useState("black")
   let [font, setFont] = useState(null)
+  let [size, setSize] = useState(20)
+  let [currentTarget, setCurrentTarget] = useState(null)
   let a;
   
 
@@ -80,6 +83,7 @@ function App() {
 
   useEffect(()=>{setBrightness()},[val,sat,cont])
   useEffect(()=>{drawShapes()},[dimensionArray])
+  useEffect(()=>{drawShapes()},[font])
 
  const canvas = canva.current;
  const img = image.current;
@@ -247,16 +251,22 @@ setSat(satn)
   let dragTarget = null;
   let startX = null;
   let startY = null;
-  
+  let currentClicked=null
   
   function drawShapes(){
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
     dimensionArray.forEach(dim=>draw(dim))}
+    // if(dimensionArray[dimensionArray.length-1]&&startX == null){
+    //   setFont(font)
+    //   dimensionArray[dimensionArray.length-1].ffont=font;
+      
+    //   console.log(font)
+    // }
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h,color,shape,text,ffont} = dim;
+  let {x,y,w,h,color,shape,text,ffont,fontSize} = dim;
   switch(shape){
     
   }
@@ -268,11 +278,11 @@ function draw(dim){
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)"
       ctx.fillRect(x, y, w, h);
       ctx.restore()
-     ctx.font = "30px" + " " + ffont;
-      ctx.fillText(text, x, y+(h/2));  
+     ctx.font = fontSize +"px" + " " + ffont;
+      ctx.fillText(text, x, y+h);  
     }
   else{
     ctx.beginPath(); //triangle
@@ -282,15 +292,7 @@ function draw(dim){
     ctx.lineTo(x,y+h);
     ctx.fill();
   }
-
-//   ctx.beginPath(); //woords
-//   ctx.fillStyle = 'green';
-//   ctx.save();
-//    ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
-//     ctx.fillRect(x, y, 30, 50);
-//     ctx.restore()
-//     ctx.font = "30px Arial";
-// ctx.fillText("Hello World", x, y);  
+  
 }
 
 const hitBox = (x, y) => {
@@ -301,6 +303,7 @@ const hitBox = (x, y) => {
     if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
       dragTarget = box; //currently dragged element
       isTarget = true;
+      setCurrentTarget(dragTarget)
       break;
     }
   }
@@ -338,12 +341,27 @@ function inputChange(e){
   setInput(e.target.value);
 }
 function giveInputColor(e){
-setInputColor(e.target.value)
-}
+  if(currentTarget==null){setInputColor(e.target.value)}
+  else{
+    currentTarget.color=e.target.value
+    dimensionArray.splice(dimensionArray.indexOf(currentTarget),1,currentTarget)
+    drawShapes()
+  }
 
-function changeFont(){
-console.log('działa')
-setFont('Festive')
+}
+function changeNumber(e){
+  if(currentTarget==null){setSize(e.target.value)}
+  currentTarget.fontSize=e.target.value
+  dimensionArray.splice(dimensionArray.indexOf(currentTarget),1,currentTarget)
+    drawShapes()
+}
+function changeFont(e){
+  if(currentTarget==null){setFont(e.target.dataset.fonts)}
+  else{
+currentTarget.ffont=e.target.dataset.fonts
+dimensionArray.splice(dimensionArray.indexOf(currentTarget),1,currentTarget)
+drawShapes()
+  }
 }
 
     return (
@@ -365,15 +383,16 @@ setFont('Festive')
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} generic="3" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font}]);}}/>
+          <Shapes op={menus} generic="3" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size}]);}}/>
           <Inpute op={menus}  type="text" onChange={inputChange}/>
           <Inpute op={menus} type="color" onChange={giveInputColor}/>
+          <Inpute op={menus} type="number" onChange={changeNumber}/>
           <FontContainer op={menus} generic="3">
             <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Catamaran" text="And where are all the gods?"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Bangers" text="'Til the morning light"  onClick={changeFont}/>
-            <ChooseFont op={menus} generic="3" chosen="Amatic" text="Fresh from the fight"  onClick={changeFont}/>
+            <ChooseFont op={menus} generic="3" chosen="Amatic SC" text="Fresh from the fight"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Gloria Hallelujah" text="Larger than life"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Indie Flower" text="Somwhere after midnight"  onClick={changeFont}/>
             <ChooseFont op={menus} generic="3" chosen="Lobster" text="In my wildest fantasy"  onClick={changeFont}/>

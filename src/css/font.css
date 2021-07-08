@@ -13,9 +13,9 @@
     padding:.3rem;
     margin:.2rem;
     display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
     text-align: center;
     width:40%;
     height:100px;
