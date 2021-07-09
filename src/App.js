@@ -256,13 +256,14 @@ setSat(satn)
   function drawShapes(){
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
-    dimensionArray.forEach(dim=>draw(dim))}
+    dimensionArray.forEach(dim=>draw(dim))
+  
+  }
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h,color,shape,text,ffont,fontSize} = dim;
+  let {x,y,w,h,color,shape,text,ffont,fontSize,chosen} = dim;
   switch(shape){
-    
   }
   if(shape==="rectangle"){
     ctx.beginPath(); //rectangle
@@ -272,11 +273,17 @@ function draw(dim){
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
-      ctx.fillStyle = "rgba(255, 255, 255, 0.1)"
+      if(chosen){
+      ctx.fillStyle = "rgba(255, 255, 255, 0.4)"
+      }
+      else{
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)"
+      }
       ctx.fillRect(x, y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
-      ctx.fillText(text, x, y+h);  
+     ctx.textAlign = 'center';
+      ctx.fillText(text, x+(w/2), y+h);  
     }
   else{
     ctx.beginPath(); //triangle
@@ -286,7 +293,6 @@ function draw(dim){
     ctx.lineTo(x,y+h);
     ctx.fill();
   }
-  
 }
 
 const hitBox = (x, y) => {
@@ -295,7 +301,6 @@ const hitBox = (x, y) => {
     const box = dimensionArray[i];
     if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
       dragTarget = box; //currently dragged element
-     // setCurrentTarget(box)
       plswork.current=box;
       isTarget = true;
       break;
@@ -309,7 +314,6 @@ const handleMouseDown = e => {
   startX = parseInt(e.nativeEvent.offsetX)// - shapeCanvas.clientLeft);
   startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY);
-  
 }
 
 const handleMouseMove = e => {
@@ -347,8 +351,10 @@ function giveInputColor(e){
 function changeNumber(e){
   setSize(e.target.value)
   plswork.current.fontSize=e.target.value
+  plswork.current.w=e.target.value*3.5;
   setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
-   drawShapes()
+  drawShapes()
+   
 }
 function changeFont(e){
       setFont(e.target.dataset.fonts)
@@ -386,7 +392,7 @@ function deleteCurrent(){
             <Inpute op={menus}  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
             <Inpute op={menus} type="number" inputLabel="Change text size:" onChange={changeNumber}/>
-            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size}]);}}/>
+            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:size*3.5, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false}])}}/>
             <FontContainer op={menus} generic="3">
               <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
               <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
