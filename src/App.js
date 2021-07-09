@@ -257,7 +257,6 @@ setSat(satn)
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
     dimensionArray.forEach(dim=>draw(dim))}
-    console.log("wywołanodrawshapes")
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
@@ -358,6 +357,11 @@ setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.ind
    drawShapes()
 }
 
+function deleteCurrent(){
+  setDimensionArray(dimensionArray=>[...dimensionArray].filter((element,index)=>index!=dimensionArray.indexOf(plswork.current)))
+   drawShapes()
+}
+
 
     return (
       <div className="app">
@@ -402,7 +406,7 @@ setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.ind
          
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
-          <DeleteDrawing op={menus} name="Delete" onClick={()=>{dimensionArray.splice(dimensionArray.indexOf(plswork.current),1);console.log(dimensionArray); setDimensionArray([...dimensionArray])}} />
+          <DeleteDrawing op={menus} name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
