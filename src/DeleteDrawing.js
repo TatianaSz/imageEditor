@@ -2,7 +2,7 @@ import React from "react"
 import './css/shapes.css'
 
 function DeleteDrawing(props){
-    if(props.op=="3" || props.op=="4"){
+    if(props.op=="3"){
         return(
             <button className="shape-button" onClick={props.onClick}>
             {props.name}            

@@ -84,7 +84,6 @@ function App() {
 
   useEffect(()=>{setBrightness()},[val,sat,cont])
   useEffect(()=>{drawShapes()},[dimensionArray])
-  useEffect(()=>{drawShapes()},[font])
  
 
  const canvas = canva.current;
@@ -258,6 +257,7 @@ setSat(satn)
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
     dimensionArray.forEach(dim=>draw(dim))}
+    console.log("wywołanodrawshapes")
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
@@ -341,20 +341,21 @@ function inputChange(e){
 function giveInputColor(e){
     setInputColor(e.target.value)
     plswork.current.color=e.target.value
-    dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
+    setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
     drawShapes()
+    
 }
 function changeNumber(e){
   setSize(e.target.value)
   plswork.current.fontSize=e.target.value
-  dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
-    drawShapes()
+  setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
+   drawShapes()
 }
 function changeFont(e){
       setFont(e.target.dataset.fonts)
 plswork.current.ffont=e.target.dataset.fonts
-dimensionArray.splice(dimensionArray.indexOf(plswork.current),1,plswork.current)
-drawShapes()
+setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
+   drawShapes()
 }
 
 
@@ -401,7 +402,7 @@ drawShapes()
          
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
-          <DeleteDrawing op={menus} name="Delete" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray].filter((element, index)=>index!=(dimensionArray.indexOf(plswork.current))));console.log(dimensionArray)}} />
+          <DeleteDrawing op={menus} name="Delete" onClick={()=>{dimensionArray.splice(dimensionArray.indexOf(plswork.current),1);console.log(dimensionArray); setDimensionArray([...dimensionArray])}} />
           </Options>
         
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
