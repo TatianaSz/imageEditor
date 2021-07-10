@@ -13,6 +13,7 @@ import Inpute from './Inpute'
 import DeleteDrawing from "./DeleteDrawing"
 import FontContainer from "./FontContainer"
 import ChooseFont from './ChooseFont'
+import TextDimnesion from './TextDimension';
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
@@ -27,6 +28,7 @@ function App() {
   const list = useRef(null);
   const filterCanva = useRef(null)
   const shapeCanva = useRef(null)
+  const dim = useRef(null)
   
 
   const [file, setFile] = useState(null);
@@ -41,7 +43,7 @@ function App() {
   let [inputColor, setInputColor] =useState("black")
   let [font, setFont] = useState("Catamaran")
   let [size, setSize] = useState(20)
-  let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size})
+  let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, ex:0})
   let a;
   
 
@@ -262,7 +264,7 @@ setSat(satn)
   }
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h,color,shape,text,ffont,fontSize,chosen} = dim;
+  let {x,y,w,h,color,shape,text,ffont,fontSize,ex} = dim;
   switch(shape){
   }
   if(shape==="rectangle"){
@@ -273,7 +275,7 @@ function draw(dim){
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
-      if(chosen){
+      if("a"){
       ctx.fillStyle = "rgba(255, 255, 255, 0.4)"
       }
       else{
@@ -282,8 +284,8 @@ function draw(dim){
       ctx.fillRect(x, y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
-     ctx.textAlign = 'center';
-      ctx.fillText(text, x+(w/2), y+h);  
+      ctx.fillText(text, x, y+h);  
+    
     }
   else{
     ctx.beginPath(); //triangle
@@ -339,6 +341,7 @@ const handleMouseOut = e => {
 
 function inputChange(e){
   setInput(e.target.value);
+  dim.current.innerHTML=e.target.value
 
 }
 function giveInputColor(e){
@@ -348,19 +351,27 @@ function giveInputColor(e){
     drawShapes()
     
 }
+
 function changeNumber(e){
   setSize(e.target.value)
   plswork.current.fontSize=e.target.value
-  plswork.current.w=e.target.value*3.5;
+  dim.current.style.fontSize = e.target.value + "px"
+  console.log(dim.current.clientWidth);
+  plswork.current.w=dim.current.clientWidth
+  plswork.current.h=dim.current.clientHeight
   setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
   drawShapes()
+  
    
 }
 function changeFont(e){
       setFont(e.target.dataset.fonts)
 plswork.current.ffont=e.target.dataset.fonts
+dim.current.style.fontFamily=e.target.dataset.fonts
+plswork.current.w=dim.current.clientWidth
+plswork.current.h=dim.current.clientHeight
 setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
-   drawShapes()
+drawShapes()
 }
 
 function deleteCurrent(){
@@ -392,7 +403,7 @@ function deleteCurrent(){
             <Inpute op={menus}  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
             <Inpute op={menus} type="number" inputLabel="Change text size:" onChange={changeNumber}/>
-            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:size*3.5, h: 50, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false}])}}/>
+            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:dim.current.clientWidth, h:dim.current.clientHeight, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, ex:shapeCanvas.getContext("2d").measureText(inputVal).width}])}}/>
             <FontContainer op={menus} generic="3">
               <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
               <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
@@ -409,6 +420,7 @@ function deleteCurrent(){
               <ChooseFont op={menus} generic="3" chosen="Sigmar One" text="Where the mountains meet the heavens"  onClick={changeFont}/>
               <ChooseFont op={menus} generic="3" chosen="Yellowtail" text="Like the fire in my blood"  onClick={changeFont}/>
             </FontContainer>
+            <TextDimnesion dimRef={dim} op={menus}/>
          
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
