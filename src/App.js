@@ -43,7 +43,7 @@ function App() {
   let [inputColor, setInputColor] =useState("black")
   let [font, setFont] = useState("Catamaran")
   let [size, setSize] = useState(20)
-  let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, ex:0})
+  let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
   let a;
   
 
@@ -258,7 +258,7 @@ setSat(satn)
 
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h,color,shape,text,ffont,fontSize,ex} = dim;
+  let {x,y,w,h,color,shape,text,ffont,fontSize,chosen} = dim;
   switch(shape){
   }
   if(shape==="rectangle"){
@@ -269,11 +269,11 @@ function draw(dim){
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
-      if("a"){
-      ctx.fillStyle = "rgba(255, 255, 255, 0.4)"
+      if(chosen){
+      ctx.fillStyle = "rgba(255, 255, 255, 0.5)"
       }
       else{
-        ctx.fillStyle = "rgba(255, 255, 255, 0.5)"
+        ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
       }
       ctx.fillRect(x, y, w, h);
       ctx.restore()
@@ -290,6 +290,8 @@ function draw(dim){
     ctx.fill();
   }
 }
+
+
 
 const hitBox = (x, y) => {
   let isTarget = true;
@@ -310,6 +312,22 @@ const handleMouseDown = e => {
   startX = parseInt(e.nativeEvent.offsetX)
   startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY);
+  for (let i = 0; i <dimensionArray.length; i++) {
+    dimensionArray[i].chosen=false;
+  }
+  console.log(dragTarget)
+  if(dragTarget!=null){
+  plswork.current.chosen=true;
+ // console.log(plswork.current.w)
+  dim.current.style.fontFamily=plswork.current.ffont;
+  dim.current.innerHTML = plswork.current.text;
+  }
+  else{
+    //plswork.current.chosen=false;
+    dragTarget=null;
+    plswork.current =null;
+  }
+  drawShapes()
 }
 
 const handleMouseMove = e => {
@@ -348,15 +366,14 @@ function giveInputColor(e){
 
 function changeNumber(e){
   setSize(e.target.value)
-  plswork.current.fontSize=e.target.value
   dim.current.style.fontSize = e.target.value + "px"
-  console.log(dim.current.clientWidth);
+  if(plswork.current!=null){
+  plswork.current.fontSize=e.target.value
   plswork.current.w=dim.current.clientWidth
-  plswork.current.h=dim.current.clientHeight
+  plswork.current.h=dim.current.clientHeight}
+  console.log(dim.current.clientWidth);
   setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
   drawShapes()
-  
-   
 }
 function changeFont(e){
       setFont(e.target.dataset.fonts)
@@ -397,7 +414,7 @@ function deleteCurrent(){
             <Inpute op={menus}  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
             <Inpute op={menus} type="number" inputLabel="Change text size:" onChange={changeNumber}/>
-            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:dim.current.clientWidth, h:dim.current.clientHeight, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, ex:shapeCanvas.getContext("2d").measureText(inputVal).width}])}}/>
+            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:dim.current.clientWidth, h:dim.current.clientHeight, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false}])}}/>
             <FontContainer op={menus} generic="3">
               <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
               <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
