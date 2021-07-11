@@ -19,6 +19,7 @@ import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 import Convolute from './Convolute';
 import { IoSwapHorizontalOutline } from 'react-icons/io5';
+import { RiRotateLockLine } from 'react-icons/ri';
 
 
 
@@ -43,6 +44,7 @@ function App() {
   let [inputColor, setInputColor] =useState("black")
   let [font, setFont] = useState("Catamaran")
   let [size, setSize] = useState(20)
+  let [deg,setDeg] = useState(0)
   let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
   let a;
   
@@ -238,6 +240,12 @@ function menu(e){ //ads background colors and sets menu state that allows to det
   }
 }
 
+function rotato(x,y,w,h,rad){
+  let ctx = shapeCanvas.getContext("2d")
+  ctx.translate(x + w / 2, y + h / 2);
+  ctx.rotate(rad); 
+  ctx.translate(-(x + w / 2), -(y + h / 2));
+}
 
 function applyFilter(van, conn, satn){
 setVal(van)
@@ -258,14 +266,21 @@ setSat(satn)
 
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let {x,y,w,h,color,shape,text,ffont,fontSize,chosen} = dim;
+  let {x,y,w,h,color,shape,text,ffont,fontSize,rot,chosen} = dim;
   switch(shape){
   }
   if(shape==="rectangle"){
+    ctx.save()
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
     ctx.beginPath(); //rectangle
     ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);}
+    ctx.fillRect(x, y, w, h);
+    ctx.restore();}
     else if(shape==="words"){
+      ctx.save()
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
       ctx.beginPath(); //woords
      ctx.fillStyle = color;
       ctx.save();
@@ -278,8 +293,9 @@ function draw(dim){
       ctx.fillRect(x, y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
-      ctx.fillText(text, x, y+h);  
     
+      ctx.fillText(text, x, y+(h*0.85));  
+      ctx.restore();
     }
   else{
     ctx.beginPath(); //triangle
@@ -371,10 +387,19 @@ function changeNumber(e){
   plswork.current.fontSize=e.target.value
   plswork.current.w=dim.current.clientWidth
   plswork.current.h=dim.current.clientHeight}
-  console.log(dim.current.clientWidth);
   setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
   drawShapes()
 }
+
+function rotateText(e){
+  setDeg(e.target.value)
+  if(plswork.current!=null){
+    plswork.current.rot=e.target.value;
+    setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
+  }
+  drawShapes()
+}
+
 function changeFont(e){
       setFont(e.target.dataset.fonts)
 plswork.current.ffont=e.target.dataset.fonts
@@ -414,7 +439,8 @@ function deleteCurrent(){
             <Inpute op={menus}  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
             <Inpute op={menus} type="number" inputLabel="Change text size:" onChange={changeNumber}/>
-            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:dim.current.clientWidth, h:dim.current.clientHeight, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false}])}}/>
+            <Inpute op={menus} type="number" inputLabel="Rotate text:" onChange={rotateText}/>
+            <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:dim.current.clientWidth, h:dim.current.clientHeight, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, rot:deg, chosen:false}])}}/>
             <FontContainer op={menus} generic="3">
               <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
               <ChooseFont op={menus} generic="3" chosen="Cookie" text="Where have all the good men gone"  onClick={changeFont}/>
@@ -433,7 +459,7 @@ function deleteCurrent(){
             </FontContainer>
             <TextDimnesion dimRef={dim} op={menus}/>
          
-          <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" }]);}} />
+          <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" , rot:deg }]);}} />
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
           <DeleteDrawing op={menus} name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
