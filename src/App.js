@@ -98,7 +98,7 @@ function App() {
  let dg=0;
  
   function setBrightness(){
-   if(img!=null){ //checks if image is even there in case someone tried to lighten nothing
+   if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
    reDraw()
    
     let iD=(dg==90||dg==-90||dg==270||dg==-270? canvas.getContext('2d').getImageData(0, 0, img.height, img.width):canvas.getContext('2d').getImageData(0, 0, img.width, img.height))
