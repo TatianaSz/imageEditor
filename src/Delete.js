@@ -13,7 +13,7 @@ function Delete(props){
         )
     }
     else {
-        return(<div></div>)
+        return(null)
     }
 }
 

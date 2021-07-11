@@ -9,7 +9,7 @@ function FiltersOpt(props){
       )
     }
     else{
-      return <div></div>
+      return (null)
     }
 }
 

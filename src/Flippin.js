@@ -14,7 +14,7 @@ function Flippin(props){
     }
 
     else{
-        return (<div></div>)
+        return (null)
     }
 }
 export default Flippin

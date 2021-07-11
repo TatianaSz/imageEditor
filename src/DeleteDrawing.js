@@ -11,7 +11,7 @@ function DeleteDrawing(props){
     }
     else{
         return(
-            <div></div>
+            null
         )
     }
 

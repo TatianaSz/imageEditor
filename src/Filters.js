@@ -14,7 +14,7 @@ function Filters(props){
     )
     }
     else{
-        return <div></div>
+        return (null)
     }
 }
 

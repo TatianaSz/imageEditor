@@ -11,7 +11,7 @@ function Shapes(props){
     }
     else{
         return (
-           <div></div>
+            null
         )
     }
 }

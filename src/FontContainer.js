@@ -10,7 +10,7 @@ function FontContainer(props){
         )
         }
     else{
-        return <div></div>
+        return (null)
     }
 }
 export default FontContainer

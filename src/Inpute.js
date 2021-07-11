@@ -14,7 +14,7 @@ function Inpute(props){
     )
     }
     else{
-        return <div></div>
+        return (null)
     }
 }
 

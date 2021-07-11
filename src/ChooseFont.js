@@ -8,7 +8,7 @@ function ChooseFont(props){
         )
         }
     else{
-        return <div></div>
+        return (null)
     }
 }
 export default ChooseFont

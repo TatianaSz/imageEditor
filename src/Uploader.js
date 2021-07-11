@@ -12,7 +12,7 @@ function Uploader(props){
           )
     }
     else{
-     return <div></div>
+     return (null)
     }
 }
 
