@@ -11,25 +11,19 @@
 .menu li{
     display:flex;
     justify-content: center;
-    position:relative;
     align-items:center;
     font-size:25px;
     height:70px;
     text-align:center;
-    width:100%;
     cursor:pointer;
 }
 .clicked{
     background-color:#373737;
     color:#ea80fc;
 }
-.lol{
-    background-color:red;
-}
 .transparent{
     z-index:1;
     position:absolute;
-    background-color:red;
     opacity:0;
     height:70px;
     width:100%

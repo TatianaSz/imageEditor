@@ -95,16 +95,15 @@ function App() {
    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
    canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
  }
+ let dg=0;
  
-  function setBrightness(van, conn, satn,iD){
-   if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
+  function setBrightness(){
+   if(img!=null){ //checks if image is even there in case someone tried to lighten nothing
    reDraw()
-    let iD=(typeof iD ==="undefined"?canvas.getContext('2d').getImageData(0, 0, img.width, img.height):iD)
-   //iD = canvas.getContext('2d').getImageData(0, 0, img.width, img.height);
+   
+    let iD=(dg==90||dg==-90||dg==270||dg==-270? canvas.getContext('2d').getImageData(0, 0, img.height, img.width):canvas.getContext('2d').getImageData(0, 0, img.width, img.height))
    let dA = iD.data;
-   // (typeof satn === "undefined"?sat:satn)   canvas.getContext('2d').getImageData(0, 0, img.width, img.height)
-
-  var sv = ((typeof satn === "undefined"?sat:satn)/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
+   var sv = (sat/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
 
   var az = (1 - sv)*0.3086 + sv;
   var bz = (1 - sv)*0.6094;
@@ -133,12 +132,12 @@ function App() {
      
   for(var i = 0; i < dA.length; i += 4)
   {
-    dA[i] += 255 * ((typeof van === "undefined"?val:van) / 100);
-    dA[i+1] += 255 * ((typeof van === "undefined"?val:van) / 100);
-    dA[i+2] += 255 * ((typeof van === "undefined"?val:van) / 100);
+    dA[i] += 255 * (val/100);
+    dA[i+1] += 255 * (val/ 100);
+    dA[i+2] += 255 * (val/100);
   }
   
-  var factor = (259.0 * ((typeof conn === "undefined"?cont:conn) + 255.0)) / (255.0 * (259.0 - (typeof conn === "undefined"?cont:conn)));
+  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
 
   for (var i = 0; i < dA.length; i+= 4) {
     dA[i] = (factor * (dA[i] - 128.0) + 128.0);
@@ -146,10 +145,9 @@ function App() {
     dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
   }
   canvas.getContext('2d').putImageData(iD, 0, 0);
-//console.log(val, cont,sat)
   }
 }
-let dg=0;
+
 function flippinTime(wziu, bziu, dg){
    const ctx = canvas.getContext("2d")
    if(wziu==1){
@@ -201,9 +199,6 @@ function flippinTime(wziu, bziu, dg){
    }
    setBrightness()
 }
-
-//    ctx.fillStyle = 'blue';
-//ctx.fillRect(0, 0,600, 337);
 
   function checkvanvs() {
     setFile(null)
@@ -259,9 +254,8 @@ setSat(satn)
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
     dimensionArray.forEach(dim=>draw(dim))
-  
-  }
-  }
+  } }
+
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
   let {x,y,w,h,color,shape,text,ffont,fontSize,ex} = dim;
@@ -313,7 +307,7 @@ const hitBox = (x, y) => {
 }
 
 const handleMouseDown = e => {
-  startX = parseInt(e.nativeEvent.offsetX)// - shapeCanvas.clientLeft);
+  startX = parseInt(e.nativeEvent.offsetX)
   startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY);
 }
@@ -426,7 +420,7 @@ function deleteCurrent(){
           <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
           <DeleteDrawing op={menus} name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
-        
+    
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
