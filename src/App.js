@@ -266,6 +266,7 @@ setSat(satn)
 
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
+  let degg = deg * Math.PI / 180;
   let {x,y,w,h,color,shape,text,ffont,fontSize,rot,chosen} = dim;
   switch(shape){
   }
@@ -285,12 +286,12 @@ function draw(dim){
      ctx.fillStyle = color;
       ctx.save();
       if(chosen){
-      ctx.fillStyle = "rgba(255, 255, 255, 0.5)"
+      ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
       }
       else{
         ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
       }
-      ctx.fillRect(x, y, w, h);
+      ctx.fillRect(x,y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
     
@@ -311,15 +312,17 @@ function draw(dim){
 
 const hitBox = (x, y) => {
   let isTarget = true;
+  let degg = deg * Math.PI / 180;
   for (let i = 0; i <dimensionArray.length; i++) {
     const box = dimensionArray[i];
-    if (x >= box.x && x <= box.x + box.w && y >= box.y && y <= box.y + box.h) {
+    //console.log(((box.x-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))),((box.x-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.y+(box.h/2))),box.y, box.y+box.h)
+    if (x >= ((box.x-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))) && x <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*(box.y-(box.y+(box.h/2)))+(box.x+(box.w/2))) && y >= ((box.x-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))) && y <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.y+(box.h/2))))
+    {
       dragTarget = box; //currently dragged element
       plswork.current=box;
       isTarget = true;
       break;
     }
-    
   }
   return isTarget;
 }
@@ -331,15 +334,13 @@ const handleMouseDown = e => {
   for (let i = 0; i <dimensionArray.length; i++) {
     dimensionArray[i].chosen=false;
   }
-  console.log(dragTarget)
   if(dragTarget!=null){
   plswork.current.chosen=true;
- // console.log(plswork.current.w)
   dim.current.style.fontFamily=plswork.current.ffont;
   dim.current.innerHTML = plswork.current.text;
   }
   else{
-    //plswork.current.chosen=false;
+    plswork.current.chosen=false;
     dragTarget=null;
     plswork.current =null;
   }
