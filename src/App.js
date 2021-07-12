@@ -264,6 +264,11 @@ function drawHandles(x,y,w,h) {
   drawCircle(x, y + h, 8);
 }
 
+//let handleDown=false;
+function handleHitbox(p1,p2){
+return Math.abs(p1 - p2) < 8;
+}
+
 
   let isDown = false;
   let dragTarget = null;
@@ -340,7 +345,20 @@ const hitBox = (x, y) => {
   let degg;
   for (let i = 0; i <dimensionArray.length; i++) {
     const box = dimensionArray[i];
-    
+    if(handleHitbox(x,box.x+box.w)&&handleHitbox(y,box.y+box.h)){
+      console.log("kliknales w prawy dolny")
+    }
+    else if(handleHitbox(x,box.x)&&handleHitbox(y,box.y+box.h)){
+      console.log("kliknales w lewy dolny")
+    }
+    else if(handleHitbox(x,box.x+box.w)&&handleHitbox(y,box.y)){
+      console.log("kliknales w prawy górny")
+    }
+    else if(handleHitbox(x,box.x)&&handleHitbox(y,box.y)){
+      console.log("kliknales w lewy górny")
+    }
+    else{
+
     if(deg<=90&&deg>=0||(deg>180&& deg<=270)){
       if(deg>180){
         degg= (deg * Math.PI / 180)-(180*Math.PI/180);
@@ -392,6 +410,7 @@ const hitBox = (x, y) => {
       break;
     }
   }
+}
   return isTarget;
 }
 // (x >= ((box.x-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))) && x <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*(box.y-(box.y+(box.h/2)))+(box.x+(box.w/2))) && y >= ((box.x-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))) && y <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.y+(box.h/2))))
@@ -403,12 +422,14 @@ const handleMouseDown = e => {
   for (let i = 0; i <dimensionArray.length; i++) {
     dimensionArray[i].chosen=false;
   }
-  if(dragTarget!=null){
+  if(dragTarget!=null&& plswork.current!=null){
   plswork.current.chosen=true;
+  if(dim.current!=null){
   dim.current.style.fontFamily=plswork.current.ffont;
   dim.current.innerHTML = plswork.current.text;
   }
-  else{
+}
+  else if(plswork.current!=null){
     plswork.current.chosen=false;
     dragTarget=null;
     plswork.current =null;
