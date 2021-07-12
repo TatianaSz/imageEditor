@@ -327,31 +327,37 @@ const hitBox = (x, y) => {
   for (let i = 0; i <dimensionArray.length; i++) {
     const box = dimensionArray[i];
     
-    if(deg<=90){
-      degg= deg * Math.PI / 180;
+    if(deg<=90||deg>180&& deg<=270){
+      if(deg>180){
+        degg= (deg * Math.PI / 180)-(180*Math.PI/180);
+      }
+      else{
+      degg= deg * Math.PI / 180;}
       originX=(box.x+(box.w/2))
       originY=(box.y+(box.h/2));
       pointX1=box.x
       pointY1 = box.y
       pointX2=(box.x+box.w);
       pointY2 =(box.y+box.h)
-      //console.log(firstX,firstY)
     }
-    else if(deg>90){
-      degg= (deg * Math.PI / 180)-(90*Math.PI/180);
+    else if((deg>90&&deg<=180)||(deg>270&&deg<=360)){
+      if(deg<=180){
+      degg= (deg * Math.PI / 180)-(90*Math.PI/180);}
+      else{
+        degg= (deg * Math.PI / 180)-(270*Math.PI/180);
+      }
       pointX1=Math.cos(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))-Math.sin(90*Math.PI/180)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2));
       pointY1 = Math.sin(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))+Math.cos(90*Math.PI/180)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2));
       pointX2=(Math.cos(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))-Math.sin(90*Math.PI/180)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2)))+box.h
       pointY2 =(Math.sin(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))+Math.cos(90*Math.PI/180)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2)))+box.w
       originX=(Math.cos(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))-Math.sin(90*Math.PI/180)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))+(box.h/2))
      originY=(Math.sin(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))+Math.cos(90*Math.PI/180)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))+(box.w/2));
-     // console.log(pointX1,pointY1,originX,originY,pointX2,pointY2)
     }
     firstX =Math.cos(degg)*(pointX1-originX)-Math.sin(degg)*(pointY2-originY)+originX;
     secondX = Math.cos(degg)*(pointX2-originX)-Math.sin(degg)*(pointY1-originY)+originX;
     firstY =Math.sin(degg)*(pointX1-originX)+Math.cos(degg)*(pointY1-originY)+originY;
     secondY =(pointX2-originX)*Math.sin(degg)+Math.cos(degg)*(pointY2-originY)+originY;
-    console.log("x,y",pointX1,pointY1,firstX,firstY,"x2,y2:", pointX2,pointY2, secondX,secondY)
+    //console.log("x,y",pointX1,pointY1,firstX,firstY,"x2,y2:", pointX2,pointY2, secondX,secondY)
        if ((x >= firstX) && x <= (secondX) && y >= (firstY) && y <= (secondY))
     {
       dragTarget = box; //currently dragged element
