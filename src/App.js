@@ -17,9 +17,6 @@ import TextDimnesion from './TextDimension';
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
-import Convolute from './Convolute';
-import { IoSwapHorizontalOutline } from 'react-icons/io5';
-import { RiRotateLockLine } from 'react-icons/ri';
 
 
 
@@ -253,6 +250,21 @@ setCont(conn)
 setSat(satn)
 }
 
+function drawCircle(x, y, radius) {
+  let ctx = shapeCanvas.getContext("2d")
+  ctx.fillStyle = "red";
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI);
+  ctx.fill();
+}
+function drawHandles(x,y,w,h) {
+  drawCircle(x, y, 8);
+  drawCircle(x + w, y, 8);
+  drawCircle(x + w, y + h, 8);
+  drawCircle(x, y + h, 8);
+}
+
+
   let isDown = false;
   let dragTarget = null;
   let startX = null;
@@ -266,7 +278,6 @@ setSat(satn)
 
 function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
-  let degg = deg * Math.PI / 180;
   let {x,y,w,h,color,shape,text,ffont,fontSize,rot,chosen} = dim;
   switch(shape){
   }
@@ -277,7 +288,10 @@ function draw(dim){
     ctx.beginPath(); //rectangle
     ctx.fillStyle = color;
     ctx.fillRect(x, y, w, h);
-    ctx.restore();}
+    drawHandles(x,y,w,h)
+    ctx.restore();
+    
+  }
     else if(shape==="words"){
       ctx.save()
     var rad = rot * Math.PI / 180;
@@ -327,7 +341,7 @@ const hitBox = (x, y) => {
   for (let i = 0; i <dimensionArray.length; i++) {
     const box = dimensionArray[i];
     
-    if(deg<=90||deg>180&& deg<=270){
+    if(deg<=90&&deg>=0||(deg>180&& deg<=270)){
       if(deg>180){
         degg= (deg * Math.PI / 180)-(180*Math.PI/180);
       }
@@ -339,6 +353,7 @@ const hitBox = (x, y) => {
       pointY1 = box.y
       pointX2=(box.x+box.w);
       pointY2 =(box.y+box.h)
+     // console.log(originX,originY)
     }
     else if((deg>90&&deg<=180)||(deg>270&&deg<=360)){
       if(deg<=180){
@@ -353,6 +368,17 @@ const hitBox = (x, y) => {
       originX=(Math.cos(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))-Math.sin(90*Math.PI/180)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))+(box.h/2))
      originY=(Math.sin(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))+Math.cos(90*Math.PI/180)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))+(box.w/2));
     }
+    // else if(deg<0&&deg>-90){
+    //   //console.log("minus")
+    //   degg= (deg * Math.PI / 180);
+    //   originX=(box.x+(box.w/2))
+    //   originY=(box.y+(box.h/2));
+    //   pointX1=box.x
+    //   pointY1 = box.y
+    //   pointX2=(box.x+box.w);
+    //   pointY2 =(box.y+box.h)
+    //   console.log(pointX1,pointX2,pointY1,pointY2)
+    // }
     firstX =Math.cos(degg)*(pointX1-originX)-Math.sin(degg)*(pointY2-originY)+originX;
     secondX = Math.cos(degg)*(pointX2-originX)-Math.sin(degg)*(pointY1-originY)+originX;
     firstY =Math.sin(degg)*(pointX1-originX)+Math.cos(degg)*(pointY1-originY)+originY;
