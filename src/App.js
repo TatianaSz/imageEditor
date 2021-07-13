@@ -274,7 +274,10 @@ return Math.abs(p1 - p2) < 8;
   let dragTarget = null;
   let startX = null;
   let startY = null;
-  
+  let lt = false;
+  let lb = false;
+  let rt = false;
+  let rb = false;
   function drawShapes(){
     if(shapeCanvas !==null) {
     shapeCanvas.getContext("2d").clearRect(0, 0, shapeCanvas.width, shapeCanvas.height);
@@ -327,18 +330,7 @@ function draw(dim){
   }
 }
 
-let pointX1;
-let pointY1;
-let pointX2;
-let pointY2;
-let originX;
-let originY;
-let firstX;
-let secondX;
-let firstY;
-let secondY;
-
-
+let pointX1,pointY1,pointX2,pointY2,originX,originY,firstX,secondX,firstY,secondY;
 
 const hitBox = (x, y) => {
   let isTarget = true;
@@ -346,18 +338,22 @@ const hitBox = (x, y) => {
   for (let i = 0; i <dimensionArray.length; i++) {
     const box = dimensionArray[i];
     if(handleHitbox(x,box.x+box.w)&&handleHitbox(y,box.y+box.h)){
-      console.log("kliknales w prawy dolny")
+      rb=true;
+      dragTarget = box;
     }
     else if(handleHitbox(x,box.x)&&handleHitbox(y,box.y+box.h)){
-      console.log("kliknales w lewy dolny")
+      lb=true;
+      dragTarget = box;
     }
     else if(handleHitbox(x,box.x+box.w)&&handleHitbox(y,box.y)){
-      console.log("kliknales w prawy górny")
+      rt=true;
+      dragTarget = box;
     }
     else if(handleHitbox(x,box.x)&&handleHitbox(y,box.y)){
-      console.log("kliknales w lewy górny")
+      lt=true;
+      dragTarget = box;
     }
-    else{
+    
 
     if(deg<=90&&deg>=0||(deg>180&& deg<=270)){
       if(deg>180){
@@ -409,16 +405,18 @@ const hitBox = (x, y) => {
       isTarget = true;
       break;
     }
-  }
+  
 }
-  return isTarget;
+console.log(plswork.current)
+  return {isTarget: isTarget, lt:lt, lb:lb, rt:rt,rb:rb};
 }
 // (x >= ((box.x-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))) && x <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*(box.y-(box.y+(box.h/2)))+(box.x+(box.w/2))) && y >= ((box.x-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))) && y <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.y+(box.h/2))))
 
 const handleMouseDown = e => {
   startX = parseInt(e.nativeEvent.offsetX)
   startY = parseInt(e.nativeEvent.offsetY)
-  isDown = hitBox(startX, startY);
+  isDown = hitBox(startX, startY).isTarget;
+  rt=hitBox(startX, startY).rt; rb=hitBox(startX, startY).rb; lt=hitBox(startX, startY).lt; lb=hitBox(startX, startY).lb;
   for (let i = 0; i <dimensionArray.length; i++) {
     dimensionArray[i].chosen=false;
   }
@@ -438,9 +436,43 @@ const handleMouseDown = e => {
 }
 
 const handleMouseMove = e => {
-  if (!isDown) return;
   const mouseX = parseInt(e.nativeEvent.offsetX)
   const mouseY = parseInt(e.nativeEvent.offsetY)
+  if (lt) {
+    const dx=mouseX-startX;
+  const dy=mouseY-startY;
+  startX=mouseX;
+  startY=mouseY;
+  dragTarget.w -=dx
+  dragTarget.h -=dy
+  dragTarget.x=mouseX
+    dragTarget.y=mouseY
+} else if (rt) {
+  const dx=mouseX-startX;
+  const dy=mouseY-startY;
+  startX=mouseX;
+  startY=mouseY;
+  dragTarget.w +=dx
+  dragTarget.h -=dy
+  dragTarget.y=mouseY
+} else if (lb) {
+  const dx=mouseX-startX;
+  const dy=mouseY-startY;
+  startX=mouseX;
+  startY=mouseY;
+  dragTarget.w -=(dx);
+  dragTarget.h += (dy);
+  dragTarget.x=mouseX
+} else if (rb) {
+  const dx=mouseX-startX;
+  const dy=mouseY-startY;
+  startX=mouseX;
+  startY=mouseY;
+  dragTarget.w +=(dx);
+  dragTarget.h += (dy);
+}
+  if (!isDown) return;
+  
   const dx = mouseX - startX;
   const dy = mouseY - startY;
   startX = mouseX;
@@ -452,10 +484,12 @@ const handleMouseMove = e => {
 const handleMouseUp = e => {
   dragTarget = null;
   isDown = false;
+  lt=false; lb=false; rt=false; rb=false;
 }
 const handleMouseOut = e => {
   dragTarget = null;
   isDown = false;
+  lt=false; lb=false; rt=false; rb=false;
 }
 
 function inputChange(e){
