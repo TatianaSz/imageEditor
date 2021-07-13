@@ -5,7 +5,7 @@ function Shapes(props){
     if(props.op==props.generic){
         return(
          <button className="shape-button" onClick={props.onClick}>
-            {props.name}            
+            {props.name}    
          </button>
         )
     }

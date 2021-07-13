@@ -17,6 +17,11 @@ import TextDimnesion from './TextDimension';
 import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
+import rec from "./images/gray.svg"
+import circle from "./images/circle.svg"
+import triangle from "./images/triangle.svg"
+import heart from "./images/heart.svg"
+
 
 
 
@@ -26,7 +31,7 @@ function App() {
   const list = useRef(null);
   const filterCanva = useRef(null)
   const shapeCanva = useRef(null)
-  const dim = useRef(null)
+  const dim = useRef(null) //transparent div for text dimensions
   
 
   const [file, setFile] = useState(null);
@@ -37,13 +42,14 @@ function App() {
   const [test, setTest] =useState([])
   const [scaleF, setScaleFill]=useState(0)
   const [dimensionArray, setDimensionArray]=useState([])
-  let [inputVal, setInput] =useState("")
-  let [inputColor, setInputColor] =useState("black")
-  let [font, setFont] = useState("Catamaran")
-  let [size, setSize] = useState(20)
-  let [deg,setDeg] = useState(0)
-  let plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
+  const [inputVal, setInput] =useState("")
+  const [inputColor, setInputColor] =useState("black")
+  const [font, setFont] = useState("Catamaran")
+  const [size, setSize] = useState(20)
+  const [deg,setDeg] = useState(0)
+  const plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
   let a;
+  let dg=0;
   
 
   function addFile(e){
@@ -82,160 +88,154 @@ function App() {
      
     }
   });
-
   useEffect(()=>{setBrightness()},[val,sat,cont])
   useEffect(()=>{drawShapes()},[dimensionArray])
- 
 
  const canvas = canva.current;
  const img = image.current;
  const shapeCanvas = shapeCanva.current;
- function reDraw(){
-   canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-   canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
- }
- let dg=0;
- 
-  function setBrightness(){
-   if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
-   reDraw()
-   
-    let iD=(dg==90||dg==-90||dg==270||dg==-270? canvas.getContext('2d').getImageData(0, 0, img.height, img.width):canvas.getContext('2d').getImageData(0, 0, img.width, img.height))
-   let dA = iD.data;
-   var sv = (sat/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
-
-  var az = (1 - sv)*0.3086 + sv;
-  var bz = (1 - sv)*0.6094;
-  var cz = (1 - sv)*0.0820;
-  var dz = (1 - sv)*0.3086;
-  var ez = (1 - sv)*0.6094 + sv;
-  var fz = (1 - sv)*0.0820;
-  var gz = (1 - sv)*0.3086;
-  var hz = (1 - sv)*0.6094;
-  var iz = (1 - sv)*0.0820 + sv;
-  
-  for(var i = 0; i < dA.length; i += 4)
-  {
-    var red = dA[i]; // Extract original red color [0 to 255]. Similarly for green and blue below
-    var green = dA[i + 1];
-    var blue = dA[i + 2];
-  
-    var saturatedRed = (az*red + bz*green + cz*blue);
-    var saturatedGreen = (dz*red + ez*green + fz*blue);
-    var saturateddBlue = (gz*red + hz*green + iz*blue);
-  
-    dA[i] = saturatedRed;
-    dA[i + 1] = saturatedGreen;
-    dA[i + 2] = saturateddBlue;
-  }
-     
-  for(var i = 0; i < dA.length; i += 4)
-  {
-    dA[i] += 255 * (val/100);
-    dA[i+1] += 255 * (val/ 100);
-    dA[i+2] += 255 * (val/100);
-  }
-  
-  var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
-
-  for (var i = 0; i < dA.length; i+= 4) {
-    dA[i] = (factor * (dA[i] - 128.0) + 128.0);
-    dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
-    dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
-  }
-  canvas.getContext('2d').putImageData(iD, 0, 0);
-  }
-}
-
-function flippinTime(wziu, bziu, dg){
-   const ctx = canvas.getContext("2d")
-   if(wziu==1){
-     if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
-       ctx.translate(0,canvas.height);
-       ctx.scale(1,-1)
-      }
-     else if(dg==90||dg==-270||dg==270||dg==-90){
-       ctx.translate(canvas.height,0); 
-       ctx.scale(-1,1)
-      }
-    }
-   else if(wziu==-1){
-     if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
-       ctx.translate(canvas.width,0); 
-       ctx.scale(-1,1)
-      }
-     else if(dg==90||dg==-270||dg==270||dg==-90){
-       ctx.translate(0,canvas.width); 
-       ctx.scale(1,-1)
-      }
-    }
-   else {
+  function reDraw(){
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-   if(dg==90 ||dg==-270){
-    canvas.setAttribute("width", img.height*test)
-    canvas.setAttribute("height", img.width*test)
-    ctx.translate(canvas.width,0)
-    ctx.rotate(dg * Math.PI / 180)
-   }
-   else if(dg==180||dg==-180){
-    canvas.setAttribute("width", img.width*test)
-    canvas.setAttribute("height", img.height*test)
-    ctx.translate(canvas.width,canvas.height)
-    ctx.rotate(dg * Math.PI / 180)
-   }
-   else if(dg==270||dg==-90){
-    canvas.setAttribute("width", img.height*test)
-    canvas.setAttribute("height", img.width*test)
-    ctx.translate(0,canvas.height)
-    ctx.rotate(-90 * Math.PI / 180)
-   }
-   else if(dg==0 || dg==360 ||dg==-360){
-    canvas.setAttribute("width", img.width*test)
-    canvas.setAttribute("height", img.height*test)
-    ctx.translate(0,0)
-    ctx.rotate(dg * Math.PI / 180)
-   }
-   }
-   setBrightness()
-}
+    canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
+  }
+  function setBrightness(){
+    if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
+    reDraw()
+    
+      let iD=(dg==90||dg==-90||dg==270||dg==-270? canvas.getContext('2d').getImageData(0, 0, img.height, img.width):canvas.getContext('2d').getImageData(0, 0, img.width, img.height))
+    let dA = iD.data;
+    var sv = (sat/100); // saturation value. 0 = grayscale, 1 = original, 2=max saturation
 
-  function checkvanvs() {
-    setFile(null)
-    var cnv = canva.current
-    const ctx = cnv.getContext("2d")
-    if (isCanvasEmpty(cnv))
-        alert('Empty!');
-    else
-    ctx.clearRect(0, 0, cnv.width, cnv.height)
-    cnv.width=600;
-    cnv.height=600;
-    setVal(0)
-    setCont(0)
-    setSat(100)
-        
-};
-
-function isCanvasEmpty(cnv) {
-    const blank = document.createElement('canvas');
-    blank.width = cnv.width;
-    blank.height = cnv.height;
-    return cnv.toDataURL() === blank.toDataURL();
-}
-
-function menu(e){ //ads background colors and sets menu state that allows to detect which was cliccked
-  a=e.target.dataset.value;
-  for(let i=0; i<list.current.childNodes.length; i++){
-    list.current.childNodes[i].classList.remove("clicked")
-    if(a==i){
-      e.target.parentNode.classList.add("clicked")
+    var az = (1 - sv)*0.3086 + sv;
+    var bz = (1 - sv)*0.6094;
+    var cz = (1 - sv)*0.0820;
+    var dz = (1 - sv)*0.3086;
+    var ez = (1 - sv)*0.6094 + sv;
+    var fz = (1 - sv)*0.0820;
+    var gz = (1 - sv)*0.3086;
+    var hz = (1 - sv)*0.6094;
+    var iz = (1 - sv)*0.0820 + sv;
+    
+    for(var i = 0; i < dA.length; i += 4)
+    {
+      var red = dA[i]; // Extract original red color [0 to 255]. Similarly for green and blue below
+      var green = dA[i + 1];
+      var blue = dA[i + 2];
+    
+      var saturatedRed = (az*red + bz*green + cz*blue);
+      var saturatedGreen = (dz*red + ez*green + fz*blue);
+      var saturateddBlue = (gz*red + hz*green + iz*blue);
+    
+      dA[i] = saturatedRed;
+      dA[i + 1] = saturatedGreen;
+      dA[i + 2] = saturateddBlue;
     }
-    setMenus(a)
+      
+    for(var i = 0; i < dA.length; i += 4)
+    {
+      dA[i] += 255 * (val/100);
+      dA[i+1] += 255 * (val/ 100);
+      dA[i+2] += 255 * (val/100);
+    }
+    
+    var factor = (259.0 * (cont + 255.0)) / (255.0 * (259.0 - cont));
+
+    for (var i = 0; i < dA.length; i+= 4) {
+      dA[i] = (factor * (dA[i] - 128.0) + 128.0);
+      dA[i+1] = (factor * (dA[i+1] - 128.0) + 128.0);
+      dA[i+2] = (factor * (dA[i+2] - 128.0) + 128.0);
+    }
+    canvas.getContext('2d').putImageData(iD, 0, 0);
+    }
   }
-  if(a==4){
-//shapeCanvas.width=canvas.width
-  //shapeCanvas.height=canvas.height;
+  function flippinTime(wziu, bziu, dg){
+    const ctx = canvas.getContext("2d")
+    if(wziu==1){
+      if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
+        ctx.translate(0,canvas.height);
+        ctx.scale(1,-1)
+        }
+      else if(dg==90||dg==-270||dg==270||dg==-90){
+        ctx.translate(canvas.height,0); 
+        ctx.scale(-1,1)
+        }
+      }
+    else if(wziu==-1){
+      if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
+        ctx.translate(canvas.width,0); 
+        ctx.scale(-1,1)
+        }
+      else if(dg==90||dg==-270||dg==270||dg==-90){
+        ctx.translate(0,canvas.width); 
+        ctx.scale(1,-1)
+        }
+      }
+    else {
+      canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+    if(dg==90 ||dg==-270){
+      canvas.setAttribute("width", img.height*test)
+      canvas.setAttribute("height", img.width*test)
+      ctx.translate(canvas.width,0)
+      ctx.rotate(dg * Math.PI / 180)
+    }
+    else if(dg==180||dg==-180){
+      canvas.setAttribute("width", img.width*test)
+      canvas.setAttribute("height", img.height*test)
+      ctx.translate(canvas.width,canvas.height)
+      ctx.rotate(dg * Math.PI / 180)
+    }
+    else if(dg==270||dg==-90){
+      canvas.setAttribute("width", img.height*test)
+      canvas.setAttribute("height", img.width*test)
+      ctx.translate(0,canvas.height)
+      ctx.rotate(-90 * Math.PI / 180)
+    }
+    else if(dg==0 || dg==360 ||dg==-360){
+      canvas.setAttribute("width", img.width*test)
+      canvas.setAttribute("height", img.height*test)
+      ctx.translate(0,0)
+      ctx.rotate(dg * Math.PI / 180)
+    }
+    }
+    setBrightness()
   }
-}
+  function checkvanvs() {
+      setFile(null)
+      var cnv = canva.current
+      const ctx = cnv.getContext("2d")
+      if (isCanvasEmpty(cnv))
+          alert('Empty!');
+      else
+      ctx.clearRect(0, 0, cnv.width, cnv.height)
+      cnv.width=600;
+      cnv.height=600;
+      setVal(0)
+      setCont(0)
+      setSat(100)
+          
+  };
+  function isCanvasEmpty(cnv) {
+      const blank = document.createElement('canvas');
+      blank.width = cnv.width;
+      blank.height = cnv.height;
+      return cnv.toDataURL() === blank.toDataURL();
+  }
+  function menu(e){ //ads background colors and sets menu state that allows to detect which was cliccked
+    a=e.target.dataset.value;
+    for(let i=0; i<list.current.childNodes.length; i++){
+      list.current.childNodes[i].classList.remove("clicked")
+      if(a==i){
+        e.target.parentNode.classList.add("clicked")
+      }
+      setMenus(a)
+    }
+    if(a==4){
+  //shapeCanvas.width=canvas.width
+    //shapeCanvas.height=canvas.height;
+    }
+  }
+
+
 
 function rotato(x,y,w,h,rad){
   let ctx = shapeCanvas.getContext("2d")
@@ -252,7 +252,7 @@ setSat(satn)
 
 function drawCircle(x, y, radius) {
   let ctx = shapeCanvas.getContext("2d")
-  ctx.fillStyle = "red";
+  ctx.fillStyle = "#ea80fc";
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, 2 * Math.PI);
   ctx.fill();
@@ -263,8 +263,6 @@ function drawHandles(x,y,w,h) {
   drawCircle(x + w, y + h, 8);
   drawCircle(x, y + h, 8);
 }
-
-//let handleDown=false;
 function handleHitbox(p1,p2){
 return Math.abs(p1 - p2) < 8;
 }
@@ -316,17 +314,43 @@ function draw(dim){
       ctx.fillRect(x,y, w, h);
       ctx.restore()
      ctx.font = fontSize +"px" + " " + ffont;
-    
       ctx.fillText(text, x, y+(h*0.85));  
       ctx.restore();
     }
+    else if(shape==="circle"){
+      ctx.beginPath();
+      ctx.arc(x+w/2, y+h/2, w/2, 0, 2 * Math.PI, false);
+      ctx.fillStyle = color;
+      ctx.fill();
+      drawHandles(x,y,w,h)
+    }
+    else if(shape==="heart"){
+      ctx.beginPath();
+      ctx.fillStyle = color;
+     ctx.moveTo(x+w/2, y+h/4);
+     ctx.bezierCurveTo(x+w/2+w/8, y, x+w-w/10, y, x+w-w/50, y+h/4);
+     ctx.bezierCurveTo(x+w,y+h/3,x+w-w/50,y+h/3+h/20,x+w-w/40,y+h/3+h/10)
+     ctx.bezierCurveTo(x+w-w/25,y+h/3+h/6,x+w-w/40,y+h/3+h/8,x+w-w/10,y+h/2+h/10)
+     ctx.bezierCurveTo(x+w-(w/11),y+h/2+h/9,x+w/2+w/100,y+h-h/50,x+w/2,y+h)
+     ctx.bezierCurveTo(x+w/2-w/100,y+h-h/50,x+(w/11),y+h/2+h/9,x+w/10,y+h/2+h/10)
+     ctx.bezierCurveTo(x+w/40,y+h/3+h/8,x+w/25,y+h/3+h/6,x+w/40,y+h/3+h/10)
+     ctx.bezierCurveTo(x+w/50,y+h/3+h/20,x,y+h/3,x+w/50, y+h/4)
+     ctx.bezierCurveTo(x+w/10, y,x+w/2-w/8, y,  x+w/2, y+h/4);
+     ctx.fill();     
+     ctx.closePath();
+     drawHandles(x,y,w,h)
+    }
   else{
-    ctx.beginPath(); //triangle
     ctx.fillStyle = color;
-    ctx.moveTo(x,y);
-    ctx.lineTo(x+w,y);
-    ctx.lineTo(x,y+h);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x+w/2, y);
+    ctx.lineTo(x, y+h);
+    ctx.lineTo(x+w, y+h);
+    ctx.lineTo(x+w/2, y);
     ctx.fill();
+    
+    drawHandles(x,y,w,h)
   }
 }
 
@@ -335,8 +359,9 @@ let pointX1,pointY1,pointX2,pointY2,originX,originY,firstX,secondX,firstY,second
 const hitBox = (x, y) => {
   let isTarget = true;
   let degg;
-  for (let i = 0; i <dimensionArray.length; i++) {
+  for (let i = dimensionArray.length-1; i>=0; i--) { //changed the direction of going through the array, so the last rendered elemens will have priority!
     const box = dimensionArray[i];
+    if(menus=="4"){
     if(handleHitbox(x,box.x+box.w)&&handleHitbox(y,box.y+box.h)){
       rb=true;
       dragTarget = box;
@@ -353,7 +378,7 @@ const hitBox = (x, y) => {
       lt=true;
       dragTarget = box;
     }
-    
+  }    
 
     if(deg<=90&&deg>=0||(deg>180&& deg<=270)){
       if(deg>180){
@@ -382,17 +407,7 @@ const hitBox = (x, y) => {
       originX=(Math.cos(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))-Math.sin(90*Math.PI/180)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))+(box.h/2))
      originY=(Math.sin(90*Math.PI/180)*(box.x-(box.x+(box.w/2)))+Math.cos(90*Math.PI/180)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))+(box.w/2));
     }
-    // else if(deg<0&&deg>-90){
-    //   //console.log("minus")
-    //   degg= (deg * Math.PI / 180);
-    //   originX=(box.x+(box.w/2))
-    //   originY=(box.y+(box.h/2));
-    //   pointX1=box.x
-    //   pointY1 = box.y
-    //   pointX2=(box.x+box.w);
-    //   pointY2 =(box.y+box.h)
-    //   console.log(pointX1,pointX2,pointY1,pointY2)
-    // }
+   
     firstX =Math.cos(degg)*(pointX1-originX)-Math.sin(degg)*(pointY2-originY)+originX;
     secondX = Math.cos(degg)*(pointX2-originX)-Math.sin(degg)*(pointY1-originY)+originX;
     firstY =Math.sin(degg)*(pointX1-originX)+Math.cos(degg)*(pointY1-originY)+originY;
@@ -407,10 +422,8 @@ const hitBox = (x, y) => {
     }
   
 }
-console.log(plswork.current)
   return {isTarget: isTarget, lt:lt, lb:lb, rt:rt,rb:rb};
 }
-// (x >= ((box.x-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.x+(box.w/2))) && x <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.cos(degg)-Math.sin(degg)*(box.y-(box.y+(box.h/2)))+(box.x+(box.w/2))) && y >= ((box.x-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*(box.y-(box.y+(box.h/2)))+(box.y+(box.h/2))) && y <= (((box.x+box.w)-(box.x+(box.w/2)))*Math.sin(degg)+Math.cos(degg)*((box.y+box.h)-(box.y+(box.h/2)))+(box.y+(box.h/2))))
 
 const handleMouseDown = e => {
   startX = parseInt(e.nativeEvent.offsetX)
@@ -423,7 +436,7 @@ const handleMouseDown = e => {
   if(dragTarget!=null&& plswork.current!=null){
   plswork.current.chosen=true;
   if(dim.current!=null){
-  dim.current.style.fontFamily=plswork.current.ffont;
+  dim.current.style.fontFamily=plswork.current.ffont; //its changing css styling of a div and then we are getting its dimensions back
   dim.current.innerHTML = plswork.current.text;
   }
 }
@@ -438,6 +451,7 @@ const handleMouseDown = e => {
 const handleMouseMove = e => {
   const mouseX = parseInt(e.nativeEvent.offsetX)
   const mouseY = parseInt(e.nativeEvent.offsetY)
+  if(menus=="4"){
   if (lt) {
     const dx=mouseX-startX;
   const dy=mouseY-startY;
@@ -471,6 +485,7 @@ const handleMouseMove = e => {
   dragTarget.w +=(dx);
   dragTarget.h += (dy);
 }
+  }
   if (!isDown) return;
   
   const dx = mouseX - startX;
@@ -584,8 +599,10 @@ function deleteCurrent(){
             </FontContainer>
             <TextDimnesion dimRef={dim} op={menus}/>
          
-          <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"gray", shape:"rectangle" , rot:deg }]);}} />
-          <Shapes op={menus} generic="4" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 80, h: 80, color:"pink" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={rec} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"#dedede", shape:"rectangle" , rot:deg }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={triangle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={circle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"circle" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={heart} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"heart" }]);}} />
           <DeleteDrawing op={menus} name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
     
