@@ -21,6 +21,7 @@ import rec from "./images/gray.svg"
 import circle from "./images/circle.svg"
 import triangle from "./images/triangle.svg"
 import heart from "./images/heart.svg"
+import star from "./images/star.svg"
 
 
 
@@ -266,6 +267,32 @@ function drawHandles(x,y,w,h) {
 function handleHitbox(p1,p2){
 return Math.abs(p1 - p2) < 8;
 }
+function drawStar(cx, cy, spikes, outerRadius, innerRadius,color) {
+  let rot = Math.PI / 2 * 3;
+  let x = cx;
+  let y = cy;
+  let step = Math.PI / spikes;
+  let ctx = shapeCanvas.getContext("2d")
+ // ctx.strokeSyle = "#000";
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - outerRadius)
+  for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius;
+      y = cy + Math.sin(rot) * outerRadius;
+      ctx.lineTo(x, y)
+      rot += step
+
+      x = cx + Math.cos(rot) * innerRadius;
+      y = cy + Math.sin(rot) * innerRadius;
+      ctx.lineTo(x, y)
+      rot += step
+  }
+  ctx.lineTo(cx, cy - outerRadius)
+  ctx.closePath();
+  ctx.fillStyle=color;
+  ctx.fill();
+
+}
 
 
   let isDown = false;
@@ -339,6 +366,10 @@ function draw(dim){
      ctx.fill();     
      ctx.closePath();
      drawHandles(x,y,w,h)
+    }
+    else if(shape==="star"){
+      drawStar(x+w/2, y+h/2, 5, w/2, h/5,color);
+         drawHandles(x,y,w,h)
     }
   else{
     ctx.fillStyle = color;
@@ -599,10 +630,11 @@ function deleteCurrent(){
             </FontContainer>
             <TextDimnesion dimRef={dim} op={menus}/>
          
-          <Shapes op={menus} generic="4" name={<img src={rec} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 50, color:"#dedede", shape:"rectangle" , rot:deg }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={rec} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"#dedede", shape:"rectangle" , rot:deg }]);}} />
           <Shapes op={menus} generic="4" name={<img src={triangle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede" }]);}} />
           <Shapes op={menus} generic="4" name={<img src={circle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"circle" }]);}} />
           <Shapes op={menus} generic="4" name={<img src={heart} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"heart" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={star} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"star" }]);}} />
           <DeleteDrawing op={menus} name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
     
