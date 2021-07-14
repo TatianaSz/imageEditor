@@ -49,7 +49,7 @@ function App() {
   const [font, setFont] = useState("Catamaran")
   const [size, setSize] = useState(20)
   const [deg,setDeg] = useState(0)
-  const [crop, setCrop] = useState({x:0,y:0})
+  const [crop, setCrop] = useState({x:0,y:0,w:0,h:0,})
   const plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
   let a;
   let dg=0;
@@ -156,6 +156,7 @@ function App() {
   }
   function flippinTime(wziu, bziu, dg){
     const ctx = canvas.getContext("2d")
+
     if(wziu==1){
       if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
         ctx.translate(0,canvas.height);
@@ -179,31 +180,31 @@ function App() {
     else {
       canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     if(dg==90 ||dg==-270){
-      canvas.setAttribute("width", img.height*test)
-      canvas.setAttribute("height", img.width*test)
+      canvas.setAttribute("width", crop.h==0?img.height*test:crop.h)
+      canvas.setAttribute("height", crop.w==0?img.width*test:crop.w)
       ctx.translate(canvas.width,0)
       ctx.rotate(dg * Math.PI / 180)
     }
     else if(dg==180||dg==-180){
-      canvas.setAttribute("width", img.width*test)
-      canvas.setAttribute("height", img.height*test)
+      canvas.setAttribute("width", crop.w==0?img.width*test:crop.w)
+      canvas.setAttribute("height", crop.h==0?img.height*test:crop.h)
       ctx.translate(canvas.width,canvas.height)
       ctx.rotate(dg * Math.PI / 180)
     }
     else if(dg==270||dg==-90){
-      canvas.setAttribute("width", img.height*test)
-      canvas.setAttribute("height", img.width*test)
+      canvas.setAttribute("width", crop.h==0?img.height*test:crop.h)
+      canvas.setAttribute("height", crop.w==0?img.width*test:crop.w)
       ctx.translate(0,canvas.height)
       ctx.rotate(-90 * Math.PI / 180)
     }
     else if(dg==0 || dg==360 ||dg==-360){
-      canvas.setAttribute("width", img.width*test)
-      canvas.setAttribute("height", img.height*test)
+      canvas.setAttribute("width", crop.w==0?img.width*test:crop.w)
+      canvas.setAttribute("height", crop.h==0?img.height*test:crop.h)
       ctx.translate(0,0)
       ctx.rotate(dg * Math.PI / 180)
     }
     }
-    setBrightness()
+    setBrightness(crop.x,crop.y)
   }
   function checkvanvs() {
       setFile(null)
@@ -714,7 +715,7 @@ function confirmCrop(){
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
           <Shapes op={menus} generic="2" name={"Crop"} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"rgba(255, 255, 255, 0.0)", shape:"cut" }]);}} />
-          <Shapes op={menus} generic="2" name={"Confirm"}  onClick={()=>{let x=plswork.current.x; let y = plswork.current.y; setCrop(crop=>{return{...crop,x:x,y:y}})}}/>
+          <Shapes op={menus} generic="2" name={"Confirm"}  onClick={()=>{let x=plswork.current.x; let y = plswork.current.y; let w=plswork.current.w; let h=plswork.current.h; setCrop(crop=>{return{...crop,x:x,y:y,w:w,h:h}})}}/>
             
             <Inpute op={menus} generic="3"  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} generic="3" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
