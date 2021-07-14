@@ -14,7 +14,6 @@ import DeleteDrawing from "./DeleteDrawing"
 import FontContainer from "./FontContainer"
 import ChooseFont from './ChooseFont'
 import TextDimnesion from './TextDimension';
-import CropDrag from "./CropDrag"
 import "./../node_modules/normalize.css/normalize.css"
 import "./css/app.css";
 import rec from "./images/gray.svg"
@@ -22,6 +21,8 @@ import circle from "./images/circle.svg"
 import triangle from "./images/triangle.svg"
 import heart from "./images/heart.svg"
 import star from "./images/star.svg"
+import bubble from "./images/bubble.svg"
+import octagon from "./images/octagon.svg"
 
 
 
@@ -245,11 +246,11 @@ function rotato(x,y,w,h,rad){
   ctx.translate(-(x + w / 2), -(y + h / 2));
 }
 
-function applyFilter(van, conn, satn){
-setVal(van)
-setCont(conn)
-setSat(satn)
-}
+  function applyFilter(van, conn, satn){
+  setVal(van)
+  setCont(conn)
+  setSat(satn)
+  }
 
   function drawCircle(x, y, radius) {
     let ctx = shapeCanvas.getContext("2d")
@@ -351,6 +352,32 @@ setSat(satn)
     ctx.fillText(text, x, y+(h*0.85));  
     ctx.restore();
   }
+  function drawBubble(x,y,w,h,color,ctx,rot){
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.moveTo(x+w/2.6,y+h/8);
+    ctx.quadraticCurveTo(x+w/8,y+h/8,x+w/8,y+h/3.2);
+    ctx.quadraticCurveTo(x+w/8,y+h/2,x+w/4,y+h/2);
+    ctx.quadraticCurveTo(x+w/4,y+h/1.6,x+w/6.6,y+h/1.6);
+    ctx.quadraticCurveTo(x+w/3.3,y+h/1.6,x+w/3,y+h/2);
+    ctx.quadraticCurveTo(x+w/1.6,y+h/2,x+w/1.6,y+h/3.2);
+    ctx.quadraticCurveTo(x+w/1.6,y+h/8,x+w/2.6,y+h/8);
+    ctx.fill()
+  }
+  function drawBevel(x,y,w,h,color,ctx){
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.moveTo(x+w/6,y);
+    ctx.lineTo(x+w-w/6,y)
+    ctx.lineTo(x+w,y+h/6);
+    ctx.lineTo(x+w,y+h-h/6);
+    ctx.lineTo(x+w-w/6,y+h);
+    ctx.lineTo(x+w/6,y+h);
+    ctx.lineTo(x,y+h-h/6);
+    ctx.lineTo(x,y+h/6);
+    ctx.closePath();
+    ctx.fill()
+  }
 
 
   let isDown = false;
@@ -390,12 +417,20 @@ function draw(dim){
       drawStar(x+w/2, y+h/2, 5, w/2, h/5,color,ctx);
       drawHandles(x,y,w,h);
       break;
+    case "bubble":
+      drawBubble(x,y,w,h,color,ctx,rot);
+      drawHandles(x,y,w,h);
+      break;
+      case "bevel":
+        drawBevel(x,y,w,h,color,ctx);
+        drawHandles(x,y,w,h);
+      break;
+
     default:
       drawTriangle(x,y,w,h,color,ctx)
       drawHandles(x,y,w,h);
       break;
   }
- 
   }
 
 let pointX1,pointY1,pointX2,pointY2,originX,originY,firstX,secondX,firstY,secondY;
@@ -647,8 +682,11 @@ function deleteCurrent(){
           <Shapes op={menus} generic="4" name={<img src={triangle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede" }]);}} />
           <Shapes op={menus} generic="4" name={<img src={circle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"circle" }]);}} />
           <Shapes op={menus} generic="4" name={<img src={heart} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"heart" }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={star} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"star" }]);}} />
-          <DeleteDrawing op={menus} name="Delete" onClick={()=>deleteCurrent()} />
+          <Shapes op={menus} generic="4" name={<img src={star} width="60"height="60"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"star" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={bubble} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"bubble" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={octagon} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"bevel" }]);}} />
+          <DeleteDrawing op={menus} generic="3" name="Delete" onClick={()=>deleteCurrent()} />
+          <DeleteDrawing op={menus} generic="4" name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
     
         <ImageUpload canvaRef={canva} shapeCanvaRef={shapeCanva} imageRef={image} src={file} 
