@@ -49,6 +49,7 @@ function App() {
   const [font, setFont] = useState("Catamaran")
   const [size, setSize] = useState(20)
   const [deg,setDeg] = useState(0)
+  const [crop, setCrop] = useState({x:0,y:0})
   const plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
   let a;
   let dg=0;
@@ -67,7 +68,6 @@ function App() {
     const shapeCanvas = shapeCanva.current;
     shapeCanvas.width=canvas.width;
     shapeCanvas.height=canvas.height;
-    console.log("uruchomionee")
     if(menus==1){
       const filterCanvas = filterCanva.current;
       for(let i=0; i<filterCanvas.children.length; i++){
@@ -93,17 +93,20 @@ function App() {
   });
   useEffect(()=>{setBrightness()},[val,sat,cont])
   useEffect(()=>{drawShapes()},[dimensionArray])
+  useEffect(()=>{confirmCrop()},[crop])
 
  const canvas = canva.current;
  const img = image.current;
  const shapeCanvas = shapeCanva.current;
-  function reDraw(){
+  function reDraw(x=0,y=0){
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-    canvas.getContext("2d").drawImage(img, 0, 0, img.width * test, img.height * test);
+    canvas.getContext("2d").drawImage(img, -x, -y, img.width * test, img.height * test);
   }
-  function setBrightness(){
+  function setBrightness(x,y){
+    let x1=crop.x;
+    let y1=crop.y;
     if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
-    reDraw()
+    reDraw(x1,y1)
     
       let iD=(dg==90||dg==-90||dg==270||dg==-270? canvas.getContext('2d').getImageData(0, 0, img.height, img.width):canvas.getContext('2d').getImageData(0, 0, img.width, img.height))
     let dA = iD.data;
@@ -231,10 +234,6 @@ function App() {
         e.target.parentNode.classList.add("clicked")
       }
       setMenus(a)
-    }
-    if(a==4){
-  //shapeCanvas.width=canvas.width
-    //shapeCanvas.height=canvas.height;
     }
   }
 
@@ -684,6 +683,15 @@ function deleteCurrent(){
   setDimensionArray(dimensionArray=>[...dimensionArray].filter((element,index)=>index!=dimensionArray.indexOf(plswork.current)))
    drawShapes()
 }
+function confirmCrop(){
+  if(shapeCanvas!=null){
+  shapeCanvas.width=plswork.current.w
+  shapeCanvas.height=plswork.current.h
+  canvas.width=plswork.current.w
+  canvas.height=plswork.current.h
+  setBrightness(crop.x,crop.y)
+  }
+}
 
 
     return (
@@ -706,6 +714,7 @@ function deleteCurrent(){
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
           <Shapes op={menus} generic="2" name={"Crop"} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"rgba(255, 255, 255, 0.0)", shape:"cut" }]);}} />
+          <Shapes op={menus} generic="2" name={"Confirm"}  onClick={()=>{let x=plswork.current.x; let y = plswork.current.y; setCrop(crop=>{return{...crop,x:x,y:y}})}}/>
             
             <Inpute op={menus} generic="3"  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} generic="3" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
