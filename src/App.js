@@ -68,6 +68,7 @@ function App() {
     const shapeCanvas = shapeCanva.current;
     shapeCanvas.width=canvas.width;
     shapeCanvas.height=canvas.height;
+    drawShapes()
     if(menus==1){
       const filterCanvas = filterCanva.current;
       for(let i=0; i<filterCanvas.children.length; i++){
@@ -98,11 +99,11 @@ function App() {
  const canvas = canva.current;
  const img = image.current;
  const shapeCanvas = shapeCanva.current;
-  function reDraw(x=0,y=0){
+  function reDraw(x,y){
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
     canvas.getContext("2d").drawImage(img, -x, -y, img.width * test, img.height * test);
   }
-  function setBrightness(x,y){
+  function setBrightness(){
     let x1=crop.x;
     let y1=crop.y;
     if(img!=null&&img.width){ //checks if image is even there in case someone tried to lighten nothing
@@ -156,7 +157,6 @@ function App() {
   }
   function flippinTime(wziu, bziu, dg){
     const ctx = canvas.getContext("2d")
-
     if(wziu==1){
       if(dg==0||dg==360||dg==-360||dg==180||dg==-180){ 
         ctx.translate(0,canvas.height);
@@ -237,8 +237,6 @@ function App() {
       setMenus(a)
     }
   }
-
-
 
 function rotato(x,y,w,h,rad){
   let ctx = shapeCanvas.getContext("2d")
@@ -546,6 +544,7 @@ const hitBox = (x, y) => {
 }
 
 const handleMouseDown = e => {
+  
   startX = parseInt(e.nativeEvent.offsetX)
   startY = parseInt(e.nativeEvent.offsetY)
   isDown = hitBox(startX, startY).isTarget;
@@ -690,6 +689,7 @@ function confirmCrop(){
   shapeCanvas.height=plswork.current.h
   canvas.width=plswork.current.w
   canvas.height=plswork.current.h
+  setDimensionArray(dimensionArray=>[...dimensionArray].filter((element,index)=>index!=dimensionArray.indexOf(plswork.current)))
   setBrightness(crop.x,crop.y)
   }
 }
