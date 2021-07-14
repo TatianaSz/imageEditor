@@ -528,6 +528,7 @@ const handleMouseDown = e => {
 }
 
 const handleMouseMove = e => {
+  if(dragTarget==null) return
   const mouseX = parseInt(e.nativeEvent.offsetX)
   const mouseY = parseInt(e.nativeEvent.offsetY)
   if(menus=="4"){
@@ -574,6 +575,7 @@ const handleMouseMove = e => {
   dragTarget.x += dx;
   dragTarget.y += dy;
   drawShapes();
+  
 }
 const handleMouseUp = e => {
   dragTarget = null;
