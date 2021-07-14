@@ -23,7 +23,7 @@ import heart from "./images/heart.svg"
 import star from "./images/star.svg"
 import bubble from "./images/bubble.svg"
 import octagon from "./images/octagon.svg"
-
+import cut from "./images/cut.svg"
 
 
 
@@ -251,7 +251,6 @@ function rotato(x,y,w,h,rad){
   setCont(conn)
   setSat(satn)
   }
-
   function drawCircle(x, y, radius) {
     let ctx = shapeCanvas.getContext("2d")
     ctx.fillStyle = "#ea80fc";
@@ -398,6 +397,23 @@ function rotato(x,y,w,h,rad){
     ctx.fill()
     ctx.restore()
   }
+  function drawCut(x,y,w,h,color,ctx){
+    
+    ctx.beginPath();
+    ctx.strokeStyle = "white";
+    ctx.rect(x, y, w, h);
+    ctx.stroke()
+    ctx.moveTo(x+w/3,y)
+    ctx.lineTo(x+w/3,y+h)
+    ctx.moveTo(x+w*2/3,y)
+    ctx.lineTo(x+w*2/3,y+h)
+    ctx.moveTo(x,y+h/3)
+    ctx.lineTo(x+w,y+h/3)
+    ctx.moveTo(x,y+h*2/3)
+    ctx.lineTo(x+w, y+h*2/3)
+    ctx.stroke();
+    
+  }
 
 
   let isDown = false;
@@ -420,6 +436,10 @@ function draw(dim){
   switch(shape){
     case "words":
       drawWords(x,y,w,h,color,ctx,rot,ffont,fontSize,chosen,text);
+      break;
+    case "cut":
+      drawCut(x,y,w,h,color,ctx)
+      drawHandles(x,y,w,h);
       break;
     case "rectangle":
       drawRectangle(x,y,w,h,color,ctx,rot)
@@ -460,7 +480,7 @@ const hitBox = (x, y) => {
   let degg;
   for (let i = dimensionArray.length-1; i>=0; i--) { //changed the direction of going through the array, so the last rendered elemens will have priority!
     const box = dimensionArray[i];
-    if(menus=="4"){
+    if((menus=="4")||(menus=="2")){
     if(handleHitbox(x,box.x+box.w)&&handleHitbox(y,box.y+box.h)){
       rb=true;
       dragTarget = box;
@@ -551,7 +571,7 @@ const handleMouseMove = e => {
   if(dragTarget==null) return
   const mouseX = parseInt(e.nativeEvent.offsetX)
   const mouseY = parseInt(e.nativeEvent.offsetY)
-  if(menus=="4"){
+  if(menus=="4"||dragTarget.shape=="cut"){
   if (lt) {
     const dx=mouseX-startX;
   const dy=mouseY-startY;
@@ -594,6 +614,12 @@ const handleMouseMove = e => {
   startY = mouseY;
   dragTarget.x += dx;
   dragTarget.y += dy;
+  if(dragTarget.shape=="cut"){
+    if(dragTarget.x<=0)dragTarget.x=0
+    else if(dragTarget.y<=0)dragTarget.y=0
+    else if(dragTarget.y+dragTarget.h>=canvas.height){return}
+    else if(dragTarget.x+dragTarget.w>=canvas.width)return
+  }
   drawShapes();
   
 }
@@ -678,7 +704,8 @@ function deleteCurrent(){
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          
+          <Shapes op={menus} generic="2" name={"Crop"} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"rgba(255, 255, 255, 0.0)", shape:"cut" }]);}} />
+            
             <Inpute op={menus} generic="3"  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} generic="3" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
             <Inpute op={menus} generic="3" type="number" inputLabel="Change text size:" onChange={changeNumber}/>
