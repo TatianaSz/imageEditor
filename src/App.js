@@ -251,48 +251,106 @@ setCont(conn)
 setSat(satn)
 }
 
-function drawCircle(x, y, radius) {
-  let ctx = shapeCanvas.getContext("2d")
-  ctx.fillStyle = "#ea80fc";
-  ctx.beginPath();
-  ctx.arc(x, y, radius, 0, 2 * Math.PI);
-  ctx.fill();
-}
-function drawHandles(x,y,w,h) {
-  drawCircle(x, y, 8);
-  drawCircle(x + w, y, 8);
-  drawCircle(x + w, y + h, 8);
-  drawCircle(x, y + h, 8);
-}
-function handleHitbox(p1,p2){
-return Math.abs(p1 - p2) < 8;
-}
-function drawStar(cx, cy, spikes, outerRadius, innerRadius,color) {
-  let rot = Math.PI / 2 * 3;
-  let x = cx;
-  let y = cy;
-  let step = Math.PI / spikes;
-  let ctx = shapeCanvas.getContext("2d")
- // ctx.strokeSyle = "#000";
-  ctx.beginPath();
-  ctx.moveTo(cx, cy - outerRadius)
-  for (let i = 0; i < spikes; i++) {
-      x = cx + Math.cos(rot) * outerRadius;
-      y = cy + Math.sin(rot) * outerRadius;
-      ctx.lineTo(x, y)
-      rot += step
-
-      x = cx + Math.cos(rot) * innerRadius;
-      y = cy + Math.sin(rot) * innerRadius;
-      ctx.lineTo(x, y)
-      rot += step
+  function drawCircle(x, y, radius) {
+    let ctx = shapeCanvas.getContext("2d")
+    ctx.fillStyle = "#ea80fc";
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI);
+    ctx.fill();
   }
-  ctx.lineTo(cx, cy - outerRadius)
-  ctx.closePath();
-  ctx.fillStyle=color;
-  ctx.fill();
+  function drawHandles(x,y,w,h) {
+    drawCircle(x, y, 8);
+    drawCircle(x + w, y, 8);
+    drawCircle(x + w, y + h, 8);
+    drawCircle(x, y + h, 8);
+  }
+  function handleHitbox(p1,p2){
+  return Math.abs(p1 - p2) < 8;
+  }
+  function drawStar(cx, cy, spikes, outerRadius, innerRadius,color,ctx) {
+    let rot = Math.PI / 2 * 3;
+    let x = cx;
+    let y = cy;
+    let step = Math.PI / spikes;
+  // ctx.strokeSyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - outerRadius)
+    for (let i = 0; i < spikes; i++) {
+        x = cx + Math.cos(rot) * outerRadius;
+        y = cy + Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y)
+        rot += step
 
-}
+        x = cx + Math.cos(rot) * innerRadius;
+        y = cy + Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y)
+        rot += step
+    }
+    ctx.lineTo(cx, cy - outerRadius)
+    ctx.closePath();
+    ctx.fillStyle=color;
+    ctx.fill();
+
+  }
+  function drawEllipse(x,y,w,h,color,ctx){
+    ctx.beginPath();
+    ctx.ellipse(x+w/2, y+h/2, w/2,h/2,2 * Math.PI, 0, 2 * Math.PI, false);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+  function drawHeart(x,y,w,h,color,ctx){
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.moveTo(x+w/2, y+h/4);
+    ctx.bezierCurveTo(x+w/2+w/8, y, x+w-w/10, y, x+w-w/50, y+h/4);
+    ctx.bezierCurveTo(x+w,y+h/3,x+w-w/50,y+h/3+h/20,x+w-w/40,y+h/3+h/10)
+    ctx.bezierCurveTo(x+w-w/25,y+h/3+h/6,x+w-w/40,y+h/3+h/8,x+w-w/10,y+h/2+h/10)
+    ctx.bezierCurveTo(x+w-(w/11),y+h/2+h/9,x+w/2+w/100,y+h-h/50,x+w/2,y+h)
+    ctx.bezierCurveTo(x+w/2-w/100,y+h-h/50,x+(w/11),y+h/2+h/9,x+w/10,y+h/2+h/10)
+    ctx.bezierCurveTo(x+w/40,y+h/3+h/8,x+w/25,y+h/3+h/6,x+w/40,y+h/3+h/10)
+    ctx.bezierCurveTo(x+w/50,y+h/3+h/20,x,y+h/3,x+w/50, y+h/4)
+    ctx.bezierCurveTo(x+w/10, y,x+w/2-w/8, y,  x+w/2, y+h/4);
+    ctx.fill();     
+    ctx.closePath();
+  }
+  function drawTriangle(x,y,w,h,color,ctx){
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x+w/2, y);
+    ctx.lineTo(x, y+h);
+    ctx.lineTo(x+w, y+h);
+    ctx.lineTo(x+w/2, y);
+    ctx.fill();
+  }
+  function drawRectangle(x,y,w,h,color,ctx,rot){
+    ctx.save()
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
+    ctx.beginPath();
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+    ctx.restore();
+  }
+  function drawWords(x,y,w,h,color,ctx,rot,ffont,fontSize,chosen,text){
+    ctx.save()
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
+    ctx.beginPath(); //woords
+    ctx.fillStyle = color;
+    ctx.save();
+    if(chosen){
+      ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
+    }
+    else{
+        ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
+    }
+    ctx.fillRect(x,y, w, h);
+    ctx.restore()
+    ctx.font = fontSize +"px" + " " + ffont;
+    ctx.fillText(text, x, y+(h*0.85));  
+    ctx.restore();
+  }
 
 
   let isDown = false;
@@ -313,77 +371,32 @@ function draw(dim){
   let ctx = shapeCanvas.getContext("2d")
   let {x,y,w,h,color,shape,text,ffont,fontSize,rot,chosen} = dim;
   switch(shape){
+    case "words":
+      drawWords(x,y,w,h,color,ctx,rot,ffont,fontSize,chosen,text);
+      break;
+    case "rectangle":
+      drawRectangle(x,y,w,h,color,ctx,rot)
+      drawHandles(x,y,w,h);
+      break;
+    case "circle":
+      drawEllipse(x,y,w,h,color,ctx)
+      drawHandles(x,y,w,h);
+      break;
+    case "heart":
+      drawHeart(x,y,w,h,color,ctx)
+      drawHandles(x,y,w,h);
+      break;
+    case "star":
+      drawStar(x+w/2, y+h/2, 5, w/2, h/5,color,ctx);
+      drawHandles(x,y,w,h);
+      break;
+    default:
+      drawTriangle(x,y,w,h,color,ctx)
+      drawHandles(x,y,w,h);
+      break;
   }
-  if(shape==="rectangle"){
-    ctx.save()
-    var rad = rot * Math.PI / 180;
-    rotato(x,y,w,h,rad)
-    ctx.beginPath(); //rectangle
-    ctx.fillStyle = color;
-    ctx.fillRect(x, y, w, h);
-    drawHandles(x,y,w,h)
-    ctx.restore();
-    
+ 
   }
-    else if(shape==="words"){
-      ctx.save()
-    var rad = rot * Math.PI / 180;
-    rotato(x,y,w,h,rad)
-      ctx.beginPath(); //woords
-     ctx.fillStyle = color;
-      ctx.save();
-      if(chosen){
-      ctx.fillStyle = "rgba(255, 255, 255, 0.3)"
-      }
-      else{
-        ctx.fillStyle = "rgba(255, 255, 255, 0.0)"
-      }
-      ctx.fillRect(x,y, w, h);
-      ctx.restore()
-     ctx.font = fontSize +"px" + " " + ffont;
-      ctx.fillText(text, x, y+(h*0.85));  
-      ctx.restore();
-    }
-    else if(shape==="circle"){
-      ctx.beginPath();
-      ctx.arc(x+w/2, y+h/2, w/2, 0, 2 * Math.PI, false);
-      ctx.fillStyle = color;
-      ctx.fill();
-      drawHandles(x,y,w,h)
-    }
-    else if(shape==="heart"){
-      ctx.beginPath();
-      ctx.fillStyle = color;
-     ctx.moveTo(x+w/2, y+h/4);
-     ctx.bezierCurveTo(x+w/2+w/8, y, x+w-w/10, y, x+w-w/50, y+h/4);
-     ctx.bezierCurveTo(x+w,y+h/3,x+w-w/50,y+h/3+h/20,x+w-w/40,y+h/3+h/10)
-     ctx.bezierCurveTo(x+w-w/25,y+h/3+h/6,x+w-w/40,y+h/3+h/8,x+w-w/10,y+h/2+h/10)
-     ctx.bezierCurveTo(x+w-(w/11),y+h/2+h/9,x+w/2+w/100,y+h-h/50,x+w/2,y+h)
-     ctx.bezierCurveTo(x+w/2-w/100,y+h-h/50,x+(w/11),y+h/2+h/9,x+w/10,y+h/2+h/10)
-     ctx.bezierCurveTo(x+w/40,y+h/3+h/8,x+w/25,y+h/3+h/6,x+w/40,y+h/3+h/10)
-     ctx.bezierCurveTo(x+w/50,y+h/3+h/20,x,y+h/3,x+w/50, y+h/4)
-     ctx.bezierCurveTo(x+w/10, y,x+w/2-w/8, y,  x+w/2, y+h/4);
-     ctx.fill();     
-     ctx.closePath();
-     drawHandles(x,y,w,h)
-    }
-    else if(shape==="star"){
-      drawStar(x+w/2, y+h/2, 5, w/2, h/5,color);
-         drawHandles(x,y,w,h)
-    }
-  else{
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x+w/2, y);
-    ctx.lineTo(x, y+h);
-    ctx.lineTo(x+w, y+h);
-    ctx.lineTo(x+w/2, y);
-    ctx.fill();
-    
-    drawHandles(x,y,w,h)
-  }
-}
 
 let pointX1,pointY1,pointX2,pointY2,originX,originY,firstX,secondX,firstY,secondY;
 
