@@ -2,7 +2,7 @@ import React from "react"
 import './css/shapes.css'
 
 function Inpute(props){
-    if(props.op =="3"){
+    if(props.op ==props.generic){
      return(
         <div className="input--container">
             <label className="input--label"> {props.inputLabel}

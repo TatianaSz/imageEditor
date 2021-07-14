@@ -600,6 +600,7 @@ function giveInputColor(e){
 }
 
 function changeNumber(e){
+  if(plswork.current.shape==="words"){
   setSize(e.target.value)
   dim.current.style.fontSize = e.target.value + "px"
   if(plswork.current!=null){
@@ -608,6 +609,7 @@ function changeNumber(e){
   plswork.current.h=dim.current.clientHeight}
   setDimensionArray((dimensionArray=>[...dimensionArray].splice(dimensionArray.indexOf(plswork.current),1,plswork.current),dimensionArray))
   drawShapes()
+  }
 }
 
 function rotateText(e){
@@ -655,10 +657,10 @@ function deleteCurrent(){
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
           
-            <Inpute op={menus}  type="text" inputLabel="Write your text:" onChange={inputChange}/>
-            <Inpute op={menus} type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
-            <Inpute op={menus} type="number" inputLabel="Change text size:" onChange={changeNumber}/>
-            <Inpute op={menus} type="number" inputLabel="Rotate text:" onChange={rotateText}/>
+            <Inpute op={menus} generic="3"  type="text" inputLabel="Write your text:" onChange={inputChange}/>
+            <Inpute op={menus} generic="3" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
+            <Inpute op={menus} generic="3" type="number" inputLabel="Change text size:" onChange={changeNumber}/>
+            <Inpute op={menus} generic="3" type="number" inputLabel="Rotate text:" onChange={rotateText}/>
             <Shapes op={menus} generic="3" name="Add your text" onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w:dim.current.clientWidth, h:dim.current.clientHeight, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, rot:deg, chosen:false}])}}/>
             <FontContainer op={menus} generic="3">
               <ChooseFont op={menus} generic="3" chosen="Festive" text="Holding out for a Hero"  onClick={changeFont}/>
@@ -677,7 +679,7 @@ function deleteCurrent(){
               <ChooseFont op={menus} generic="3" chosen="Yellowtail" text="Like the fire in my blood"  onClick={changeFont}/>
             </FontContainer>
             <TextDimnesion dimRef={dim} op={menus}/>
-         
+            <Inpute op={menus} generic="4" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
           <Shapes op={menus} generic="4" name={<img src={rec} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"#dedede", shape:"rectangle" , rot:deg }]);}} />
           <Shapes op={menus} generic="4" name={<img src={triangle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede" }]);}} />
           <Shapes op={menus} generic="4" name={<img src={circle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"circle" }]);}} />
