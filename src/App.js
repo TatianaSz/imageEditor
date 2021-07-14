@@ -23,7 +23,7 @@ import heart from "./images/heart.svg"
 import star from "./images/star.svg"
 import bubble from "./images/bubble.svg"
 import octagon from "./images/octagon.svg"
-import cut from "./images/cut.svg"
+
 
 
 
@@ -64,7 +64,10 @@ function App() {
     const canvas = canva.current;
     const ctx = canvas.getContext("2d")
     const img = image.current;
-    //console.log(img)
+    const shapeCanvas = shapeCanva.current;
+    shapeCanvas.width=canvas.width;
+    shapeCanvas.height=canvas.height;
+    console.log("uruchomionee")
     if(menus==1){
       const filterCanvas = filterCanva.current;
       for(let i=0; i<filterCanvas.children.length; i++){
@@ -76,8 +79,6 @@ function App() {
         var x = (filterCanvasAll.width / 2) - (img.width / 2) * scaleF;
         var y = (filterCanvasAll.height / 2) - (img.height / 2) * scaleF;
        fctx.drawImage(img, x,y, img.width*scaleF, img.height*scaleF)
-      // fctx.fillStyle= 'rgba(207,194,15,0.36)'
-       //fctx.fillRect(x,y, img.width*scaleF, img.height*scaleF)
       }
     }
    
@@ -616,7 +617,7 @@ const handleMouseMove = e => {
   dragTarget.y += dy;
   if(dragTarget.shape=="cut"){
     if(dragTarget.x<=0)dragTarget.x=0
-    else if(dragTarget.y<=0)dragTarget.y=0
+    if(dragTarget.y<=0)dragTarget.y=0
     else if(dragTarget.y+dragTarget.h>=canvas.height){return}
     else if(dragTarget.x+dragTarget.w>=canvas.width)return
   }
