@@ -268,12 +268,11 @@ function rotato(x,y,w,h,rad){
   function handleHitbox(p1,p2){
   return Math.abs(p1 - p2) < 8;
   }
-  function drawStar(cx, cy, spikes, outerRadius, innerRadius,color,ctx) {
+  function drawStar(cx, cy,w,h, spikes, outerRadius, innerRadius,color,ctx,rotat) {
     let rot = Math.PI / 2 * 3;
     let x = cx;
     let y = cy;
     let step = Math.PI / spikes;
-  // ctx.strokeSyle = "#000";
     ctx.beginPath();
     ctx.moveTo(cx, cy - outerRadius)
     for (let i = 0; i < spikes; i++) {
@@ -291,15 +290,23 @@ function rotato(x,y,w,h,rad){
     ctx.closePath();
     ctx.fillStyle=color;
     ctx.fill();
+  
 
   }
-  function drawEllipse(x,y,w,h,color,ctx){
+  function drawEllipse(x,y,w,h,color,ctx,rot){
+    ctx.save()
     ctx.beginPath();
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
     ctx.ellipse(x+w/2, y+h/2, w/2,h/2,2 * Math.PI, 0, 2 * Math.PI, false);
     ctx.fillStyle = color;
     ctx.fill();
+    ctx.restore();
   }
-  function drawHeart(x,y,w,h,color,ctx){
+  function drawHeart(x,y,w,h,color,ctx,rot){
+    ctx.save();
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
     ctx.beginPath();
     ctx.fillStyle = color;
     ctx.moveTo(x+w/2, y+h/4);
@@ -313,8 +320,12 @@ function rotato(x,y,w,h,rad){
     ctx.bezierCurveTo(x+w/10, y,x+w/2-w/8, y,  x+w/2, y+h/4);
     ctx.fill();     
     ctx.closePath();
+    ctx.restore();
   }
-  function drawTriangle(x,y,w,h,color,ctx){
+  function drawTriangle(x,y,w,h,color,ctx,rot){
+    ctx.save();
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.moveTo(x, y);
@@ -323,6 +334,7 @@ function rotato(x,y,w,h,rad){
     ctx.lineTo(x+w, y+h);
     ctx.lineTo(x+w/2, y);
     ctx.fill();
+    ctx.restore()
   }
   function drawRectangle(x,y,w,h,color,ctx,rot){
     ctx.save()
@@ -353,6 +365,9 @@ function rotato(x,y,w,h,rad){
     ctx.restore();
   }
   function drawBubble(x,y,w,h,color,ctx,rot){
+    ctx.save();
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
     ctx.beginPath();
     ctx.fillStyle = color;
     ctx.moveTo(x+w/2.6,y+h/8);
@@ -363,8 +378,12 @@ function rotato(x,y,w,h,rad){
     ctx.quadraticCurveTo(x+w/1.6,y+h/2,x+w/1.6,y+h/3.2);
     ctx.quadraticCurveTo(x+w/1.6,y+h/8,x+w/2.6,y+h/8);
     ctx.fill()
+    ctx.restore();
   }
-  function drawBevel(x,y,w,h,color,ctx){
+  function drawBevel(x,y,w,h,color,ctx,rot){
+    ctx.save();
+    var rad = rot * Math.PI / 180;
+    rotato(x,y,w,h,rad)
     ctx.beginPath();
     ctx.fillStyle = color;
     ctx.moveTo(x+w/6,y);
@@ -377,6 +396,7 @@ function rotato(x,y,w,h,rad){
     ctx.lineTo(x,y+h/6);
     ctx.closePath();
     ctx.fill()
+    ctx.restore()
   }
 
 
@@ -406,15 +426,15 @@ function draw(dim){
       drawHandles(x,y,w,h);
       break;
     case "circle":
-      drawEllipse(x,y,w,h,color,ctx)
+      drawEllipse(x,y,w,h,color,ctx,rot)
       drawHandles(x,y,w,h);
       break;
     case "heart":
-      drawHeart(x,y,w,h,color,ctx)
+      drawHeart(x,y,w,h,color,ctx,rot)
       drawHandles(x,y,w,h);
       break;
     case "star":
-      drawStar(x+w/2, y+h/2, 5, w/2, h/5,color,ctx);
+      drawStar(x+w/2, y+h/2,w,h,5, w/2, h/5,color,ctx,rot);
       drawHandles(x,y,w,h);
       break;
     case "bubble":
@@ -422,12 +442,12 @@ function draw(dim){
       drawHandles(x,y,w,h);
       break;
       case "bevel":
-        drawBevel(x,y,w,h,color,ctx);
+        drawBevel(x,y,w,h,color,ctx,rot);
         drawHandles(x,y,w,h);
       break;
 
     default:
-      drawTriangle(x,y,w,h,color,ctx)
+      drawTriangle(x,y,w,h,color,ctx,rot)
       drawHandles(x,y,w,h);
       break;
   }
