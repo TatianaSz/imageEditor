@@ -13,6 +13,7 @@ function ImageUpload(props){
             onMouseOut={props.onMouseOut}/>
             <img  ref={props.imageRef} id="myImg" src={props.src} />
         </div>
+        {props.children}
      </div>
     )
 }

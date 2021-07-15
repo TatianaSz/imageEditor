@@ -62,3 +62,7 @@ input[type=color]{
     margin-left:auto;
     margin-top:.6rem;
 }
+.shape-button.Download{
+    width:25%;
+    margin-top:6rem;
+}
