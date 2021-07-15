@@ -442,32 +442,46 @@ function draw(dim){
       break;
     case "rectangle":
       drawRectangle(x,y,w,h,color,ctx,rot)
+      if(chosen){
       drawHandles(x,y,w,h);
+      }
       break;
     case "circle":
       drawEllipse(x,y,w,h,color,ctx,rot)
-      drawHandles(x,y,w,h);
+      if(chosen){
+        drawHandles(x,y,w,h);
+        }
       break;
     case "heart":
       drawHeart(x,y,w,h,color,ctx,rot)
-      drawHandles(x,y,w,h);
+      if(chosen){
+        drawHandles(x,y,w,h);
+        }
       break;
     case "star":
       drawStar(x+w/2, y+h/2,w,h,5, w/2, h/5,color,ctx,rot);
-      drawHandles(x,y,w,h);
+      if(chosen){
+        drawHandles(x,y,w,h);
+        }
       break;
     case "bubble":
       drawBubble(x,y,w,h,color,ctx,rot);
-      drawHandles(x,y,w,h);
+      if(chosen){
+        drawHandles(x,y,w,h);
+        }
       break;
       case "bevel":
         drawBevel(x,y,w,h,color,ctx,rot);
-        drawHandles(x,y,w,h);
+        if(chosen){
+          drawHandles(x,y,w,h);
+          }
       break;
 
     default:
       drawTriangle(x,y,w,h,color,ctx,rot)
-      drawHandles(x,y,w,h);
+      if(chosen){
+        drawHandles(x,y,w,h);
+        }
       break;
   }
   }
@@ -740,13 +754,13 @@ function confirmCrop(){
             </FontContainer>
             <TextDimnesion dimRef={dim} op={menus}/>
             <Inpute op={menus} generic="4" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
-          <Shapes op={menus} generic="4" name={<img src={rec} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"#dedede", shape:"rectangle" , rot:deg }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={triangle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede" }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={circle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"circle" }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={heart} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"heart" }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={star} width="60"height="60"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"star" }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={bubble} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"bubble" }]);}} />
-          <Shapes op={menus} generic="4" name={<img src={octagon} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"bevel" }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={rec} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"#dedede", shape:"rectangle" ,chosen:false, rot:deg }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={triangle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede",chosen:false }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={circle} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"circle",chosen:false }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={heart} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"heart" ,chosen:false}]);}} />
+          <Shapes op={menus} generic="4" name={<img src={star} width="60"height="60"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"star",chosen:false }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={bubble} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"bubble",chosen:false }]);}} />
+          <Shapes op={menus} generic="4" name={<img src={octagon} width="50"height="50"/>} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 100, w: 200, h:200, color:"#dedede", shape:"bevel" ,chosen:false}]);}} />
           <DeleteDrawing op={menus} generic="3" name="Delete" onClick={()=>deleteCurrent()} />
           <DeleteDrawing op={menus} generic="4" name="Delete" onClick={()=>deleteCurrent()} />
           </Options>
