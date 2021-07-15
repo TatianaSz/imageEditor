@@ -51,6 +51,7 @@ function App() {
   const [deg,setDeg] = useState(0)
   const [crop, setCrop] = useState({x:0,y:0,w:0,h:0,})
   const plswork = useRef({ x: -100, y: 0, w: 0, h: 0, color:inputColor, shape:"words", text:inputVal, ffont:font, fontSize:size, chosen:false})
+  const [options, setOptions] = useState([2,10])
   let a;
   let dg=0;
   
@@ -583,6 +584,7 @@ const handleMouseDown = e => {
 
 const handleMouseMove = e => {
   if(dragTarget==null) return
+  if(dragTarget.h<=20||dragTarget.w<=20) {dragTarget.h=20;dragTarget.w=20;} //its not allowing current shape to have negative values
   const mouseX = parseInt(e.nativeEvent.offsetX)
   const mouseY = parseInt(e.nativeEvent.offsetY)
   if(menus=="4"||dragTarget.shape=="cut"){
@@ -703,11 +705,13 @@ function confirmCrop(){
   shapeCanvas.height=plswork.current.h
   canvas.width=plswork.current.w
   canvas.height=plswork.current.h
-  setDimensionArray(dimensionArray=>[...dimensionArray].filter((element,index)=>index!=dimensionArray.indexOf(plswork.current)))
+  setDimensionArray(dimensionArray=>[...dimensionArray].filter((element)=>element.shape!="cut"))
   setBrightness(crop.x,crop.y)
   }
 }
-
+function cropOptions(){
+setOptions([...options].reverse())
+}
 
     return (
       <div className="app">
@@ -728,8 +732,9 @@ function confirmCrop(){
           </Filters>
           <Flippin op={menus} name="Flip" horr="Horizontally" verr="Vertically" hor={function(){flippinTime(1,-1,dg)}} ver={function(){flippinTime(-1,1,dg)}}/>
           <Flippin op={menus} name="Rotate" horr="Left" verr="Right" hor={function(){if(dg==-360){dg=0}dg-=90;flippinTime(0,-1, dg)}} ver={function(){if(dg==360){dg=0}dg+=90;flippinTime(0,1, dg)}}/> 
-          <Shapes op={menus} generic="2" name={"Crop"} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 100, y: 120, w: 200, h: 150, color:"rgba(255, 255, 255, 0.0)", shape:"cut" }]);}} />
-          <Shapes op={menus} generic="2" name={"Confirm"}  onClick={()=>{let x=plswork.current.x; let y = plswork.current.y; let w=plswork.current.w; let h=plswork.current.h; setCrop(crop=>{return{...crop,x:x,y:y,w:w,h:h}})}}/>
+          <Shapes op={menus} generic={options[0]} name={"Crop"} onClick={()=>{setDimensionArray(dimensionArray=>[...dimensionArray,{ x: 0, y: 0, w: 200, h: 150, color:"rgba(255, 255, 255, 0.0)", shape:"cut" }]);cropOptions()}} />
+          <Shapes op={menus} generic={options[1]} name={"Confirm"}  onClick={()=>{let x=plswork.current.x; let y = plswork.current.y; let w=plswork.current.w; let h=plswork.current.h; setCrop(crop=>{return{...crop,x:x,y:y,w:w,h:h}});cropOptions()}}/>
+          <Shapes op={menus} generic={options[1]} name={"Cancel"}  onClick={()=>{cropOptions();  setDimensionArray(dimensionArray=>[...dimensionArray].filter((element)=>element.shape!="cut"))}}/>
             
             <Inpute op={menus} generic="3"  type="text" inputLabel="Write your text:" onChange={inputChange}/>
             <Inpute op={menus} generic="3" type="color" inputLabel="Choose text color: " onChange={giveInputColor}/>
