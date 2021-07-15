@@ -7,7 +7,7 @@ function Inpute(props){
         <div className="input--container">
             <label className="input--label"> {props.inputLabel}
             <div className={props.type}>
-            <input type={props.type} onChange={props.onChange}/>
+            <input type={props.type} min={props.min} onChange={props.onChange}/>
             </div>
             </label>
         </div>
