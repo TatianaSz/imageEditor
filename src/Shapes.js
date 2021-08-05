@@ -9,7 +9,7 @@ function Shapes(props){
          </button>
         )
     }
-    else if(props.name=="Download"){
+    else if(props.op==props.gener){
         return(
             <a download="BestImageEditorEver.png" ref={props.downloadRef} className={`shape-button ${props.name}`} onClick={props.onClick}>
             {props.name}    

@@ -62,6 +62,8 @@ function App() {
    setFile(
      URL.createObjectURL(e.target.files[0])
     )
+   
+    downloadImage.current.style.visibility="visible";
   }
   useEffect(() => {   
     const canvas = canva.current;
@@ -728,6 +730,7 @@ function downloadFinished(){
         <Options>
           <Uploader op={menus}   onChange={addFile}/>
           <Delete op={menus} onClick={checkvanvs}/>
+          <Shapes op={menus} gener="0" name={"Download"} downloadRef={downloadImage}  onClick={()=>{downloadFinished()}}/>
           <Slider op={menus}  name="Brightness" value={val} min={"-70"} max={"70"} onClickRight={()=>setVal(val+3)} onClickLeft={()=>{setVal(val-3)}} />
           <Slider op={menus} name="Contrast" value={cont} min={"-70"} max={"70"} onClickRight={()=>{setCont(cont+3)}} onClickLeft={()=>{setCont(cont-3)}}/> 
           <Slider op={menus}  name="Saturation" value={sat} min={"0"} max={"200"} onClickRight={()=>{setSat(sat+3)}} onClickLeft={()=>{setSat(sat-3)}}/>
@@ -784,8 +787,9 @@ function downloadFinished(){
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseOut={handleMouseOut} >
-    <Shapes op={menus}  name={"Download"} downloadRef={downloadImage}  onClick={()=>{downloadFinished()}}/>
+    
       </ImageUpload>
+      
       </div>
     );
   
